@@ -42,12 +42,28 @@ public class FieldCentricDriving {
         double fl = yRotated + xRotated - rx;
         double fr = yRotated - xRotated + rx;
 
-        double denominator = Math.max(Math.max(Math.max(Math.max(1d,rl),rr),fl),fr);
+        double denominator = findMaxAbs(1d, rl, rr, fl, fr);
 
         rearLeft.setPower(rl/denominator);
         rearRight.setPower(rr/denominator);
         frontLeft.setPower(fl/denominator);
         frontRight.setPower(fr/denominator);
+    }
+
+    public double findMaxAbs(double a,double b, double c, double d, double e){
+
+        b = Math.abs(b);
+        c = Math.abs(c);
+        d = Math.abs(d);
+        e = Math.abs(e);
+
+        double ret = a;
+        ret = Math.max(ret, b);
+        ret = Math.max(ret, c);
+        ret = Math.max(ret, d);
+        ret = Math.max(ret, e);
+
+        return ret;
     }
 
 }
