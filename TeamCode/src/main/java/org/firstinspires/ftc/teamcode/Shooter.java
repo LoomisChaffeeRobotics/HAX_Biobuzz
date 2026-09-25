@@ -42,7 +42,7 @@ public class Shooter {
     }
 
     public void toggleSpinUp(){
-        spinUp = !spinUp
+        spinUp = !spinUp;
         if (!spinUp){
             flyWheel.setVelocity(RPMtoTicksPerSecond * rpm);
         }
