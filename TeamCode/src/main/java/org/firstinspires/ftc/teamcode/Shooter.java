@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import static java.lang.Math.abs;
 
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -30,7 +29,6 @@ public class Shooter {
     /// -------------------functions------------------
 
     public void init(HardwareMap hardwareMap, String flickerName, String flyWheelName) {
-
         flicker = hardwareMap.get(Servo.class, flickerName);
         flyWheel = hardwareMap.get(DcMotorEx.class, flyWheelName);
         rpm = 0;
