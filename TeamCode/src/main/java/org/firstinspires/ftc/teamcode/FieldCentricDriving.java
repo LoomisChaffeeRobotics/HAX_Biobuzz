@@ -1,8 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 
 public class FieldCentricDriving {
 
@@ -10,7 +14,11 @@ public class FieldCentricDriving {
     DcMotor rearRight;
     DcMotor frontLeft;
     DcMotor frontRight;
-    void Init(HardwareMap hardwareMap){
+
+    boolean autoDrive = false;
+
+    double yaw = 0d;
+    void init(HardwareMap hardwareMap){
 
         rearLeft = hardwareMap.get(DcMotor.class, "rearLeft");
         rearRight = hardwareMap.get(DcMotor.class, "rearRight");
@@ -26,11 +34,10 @@ public class FieldCentricDriving {
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-    void Drive(double leftX, double leftY, double rightX, double yawRadsCounterClockwise){
+    void drive(double leftX, double leftY, double rightX){
         double x = leftX;
         double y = leftY;
         double rx = rightX;
-        double yaw = yawRadsCounterClockwise;
 
         double s = Math.sin(yaw);
         double c = Math.cos(yaw);
@@ -65,5 +72,21 @@ public class FieldCentricDriving {
 
         return ret;
     }
+
+    void setMotorPowers(double leftStickX, double leftStickY, double rightStickX){
+        if (!autoDrive){
+            drive(leftStickX,leftStickY,rightStickX);
+            return;
+        }
+        Pose2D error;
+
+    }
+
+    void updatePosition(Pose2D position){
+        yaw = position.getHeading(AngleUnit.RADIANS);
+
+
+    }
+
 
 }
