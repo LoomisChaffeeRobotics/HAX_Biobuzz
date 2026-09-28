@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
@@ -26,9 +27,12 @@ public class FieldCentricDriving {
     double ki = 0.00;
     double kd = 0.00;
 
-    FancyPID pid;
-    void init(HardwareMap hardwareMap){
+    Telemetry telemetryDrive;
 
+    FancyPID pid = new FancyPID();
+    void init(HardwareMap hardwareMap, Telemetry telemetry){
+
+        telemetryDrive = telemetry;
         rearLeft = hardwareMap.get(DcMotor.class, "rearLeft");
         rearRight = hardwareMap.get(DcMotor.class, "rearRight");
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
@@ -67,6 +71,8 @@ public class FieldCentricDriving {
         rearRight.setPower(rr/denominator);
         frontLeft.setPower(fl/denominator);
         frontRight.setPower(fr/denominator);
+
+        telemetryDrive.addData("rl: ", rl);
     }
 
     public double findMaxAbs(double a,double b, double c, double d, double e){
