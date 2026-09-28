@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 
 public class FieldCentricDriving {
@@ -18,6 +19,14 @@ public class FieldCentricDriving {
     boolean autoDrive = false;
 
     double yaw = 0d;
+    double x = 0d;
+    double y = 0d;
+
+    double kp = 0.00;
+    double ki = 0.00;
+    double kd = 0.00;
+
+    FancyPID pid;
     void init(HardwareMap hardwareMap){
 
         rearLeft = hardwareMap.get(DcMotor.class, "rearLeft");
@@ -32,6 +41,9 @@ public class FieldCentricDriving {
         rearRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        pid.setCoefficients(kp,ki,kd);
+        pid.init();
     }
 
     void drive(double leftX, double leftY, double rightX){
@@ -76,16 +88,23 @@ public class FieldCentricDriving {
     void setMotorPowers(double leftStickX, double leftStickY, double rightStickX){
         if (!autoDrive){
             drive(leftStickX,leftStickY,rightStickX);
+            pid.init(); // i dont want integral windup or weird stuff so i reset it
             return;
         }
-        Pose2D error;
+        double displacementFromHiveX = x - 72d;
+        double displacementFromHiveY = y - 72d;
+        double angleToHive = Math.atan2(displacementFromHiveY,displacementFromHiveX);
+        pid.setTarget(angleToHive);
+        pid.update(yaw);
+        double rotationalVelocity = pid.getVelocity();
 
+        drive(leftStickX,leftStickY,rotationalVelocity);
     }
 
     void updatePosition(Pose2D position){
         yaw = position.getHeading(AngleUnit.RADIANS);
-
-
+        x = position.getX(DistanceUnit.INCH);
+        y = position.getY(DistanceUnit.INCH);
     }
 
 

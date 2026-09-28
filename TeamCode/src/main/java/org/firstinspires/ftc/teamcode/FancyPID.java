@@ -4,20 +4,20 @@ public class FancyPID {
         public double PID_P = 1;
         public double PID_I = 0;
         public double PID_D = 0;
-        public double velo = 0;
-        public double pidInt = 0;
-        public double pidDev = 0;
-        public double errorCur = 0;
+        public double velocity = 0;
+        public double errorSum = 0;
+        public double errorRateOfChange = 0;
+        public double errorCurrent = 0;
         public double errorPrev = 0;
-        public double iMax;
-        public double iRange;
-        public double Kp;
-        public double Ki;
-        public double Kd;
-        public double target;
-        public boolean arrived;
-        public double errorTol;
-        public double dTol;
+        public double iMax = 0;
+        public double iRange = 0;
+        public double Kp = 0;
+        public double Ki = 0;
+        public double Kd = 0;
+        public double target = 0;
+        public boolean arrived = false;
+        public double errorTolerance = 0;
+        public double rateOfChangeTolerance = 0;
 
         public void PID(){
 
@@ -29,40 +29,76 @@ public class FancyPID {
             Kd = d;
         }
         public void init() {
-            pidInt = 0;
-            pidDev = 0;
-            errorPrev = target;
+            errorSum = 0;
+            errorRateOfChange = 0;
+            errorPrev = 0;
         }
 
+        public void setTarget(double newTarget){
+            target = newTarget;
+        }
+
+        //sets a cap on how much the integral influences the output of the PID. setting it to 0 (default) deactivates it
+        void setMaxIntegral(double max){
+            iMax = max / Ki;
+        }
+
+        //if the error is outside that radius the integral WONT be used. setting it to 0 (default) deactivates it
+        void setIRange(double range){
+            iRange = range;
+        }
+        void setTolerances(double tolerance){
+            errorTolerance = tolerance;
+        }
+        void setTolerances(double tolerance, double speedTolerance){
+            errorTolerance = tolerance;
+            rateOfChangeTolerance = speedTolerance;
+        }
         public void update(double current) {
-            errorCur = target - current;
-            PID_P = errorCur * Kp;
+            errorCurrent = target - current;
+            PID_P = errorCurrent * Kp;
 
-            pidDev = errorCur - errorPrev;
-            errorPrev = errorCur;
-            PID_D = pidDev * Kd;
+            errorRateOfChange = errorCurrent - errorPrev;
+            errorPrev = errorCurrent;
+            PID_D = errorRateOfChange * Kd;
 
-            if (Math.abs(PID_P) >= iRange) {
-                pidInt = 0;
+            if (Math.abs(errorCurrent) >= iRange && iRange != 0) {
+                errorSum = 0;
             } else {
-                pidInt += errorCur;
+                errorSum += errorCurrent;
             }
 
-            if (Math.abs(pidInt * Ki) >= iMax) {
-                pidInt = Math.signum(pidInt) * iMax / Ki;
+            if (Math.abs(errorSum) >= iMax && iMax != 0) {
+                errorSum = Math.signum(errorSum) * iMax;
             }
-            if ((Math.signum(errorCur) != Math.signum(pidInt)) || (Math.abs(errorCur) < errorTol)) {
-                pidInt = 0;
+            if ((Math.signum(errorCurrent) != Math.signum(errorSum)) || (Math.abs(errorCurrent) < errorTolerance)) {
+                errorSum = 0;
             }
-            if (Math.abs(errorCur) <= errorTol && Math.abs(pidDev) <= dTol) {
+            if (Math.abs(errorCurrent) <= errorTolerance && Math.abs(errorRateOfChange) <= rateOfChangeTolerance) {
                 arrived = true;
             }
             else{
                 arrived = false;
             }
-            PID_I = pidInt * Ki;
+            PID_I = errorSum * Ki;
 
-            velo = PID_P + PID_I + PID_D;
+            velocity = PID_P + PID_I + PID_D;
         }
 
+        public double getVelocity(){
+            return velocity;
+        }
+
+
+        public boolean isArrived(){
+            return arrived;
+        }
+
+        public boolean isWithinTolerance(double tolerance){
+            return(Math.abs(errorCurrent) <= tolerance);
+        }
+
+        public boolean isWithinTolerance(double tolerance, double speedTolerance){
+            return(Math.abs(errorCurrent) <= tolerance && Math.abs(errorRateOfChange) <= speedTolerance);
+        }
 }
