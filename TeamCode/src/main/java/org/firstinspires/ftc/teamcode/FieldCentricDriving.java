@@ -75,6 +75,13 @@ public class FieldCentricDriving {
         telemetryDrive.addData("rl: ", rl);
     }
 
+    void simpleHDrive(double leftStick, double rightStick){
+        rearLeft.setPower(leftStick + rightStick);
+        rearRight.setPower(leftStick - rightStick);
+        frontLeft.setPower(leftStick + rightStick);
+        frontRight.setPower(leftStick - rightStick);
+    }
+
     public double findMaxAbs(double a,double b, double c, double d, double e){
 
         b = Math.abs(b);
