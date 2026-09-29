@@ -1,21 +1,18 @@
 package org.firstinspires.ftc.teamcode;
 
-import androidx.xr.runtime.Config;
-
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @TeleOp
-public class main extends OpMode {
+public class TeleOpTesting extends OpMode {
 
     FieldCentricDriving Drive;
 
-    intake Intake;
+    Intake Intake;
 
     Shooter shooterPollen;
     Shooter shooterNectar;
@@ -34,7 +31,7 @@ public class main extends OpMode {
     public void init() {
         shooterPollen = new Shooter();
         shooterNectar = new Shooter();
-        Intake = new intake();
+        Intake = new Intake();
         drive = new FieldCentricDriving();
 
         shooterPollen.init(hardwareMap, "flickerP", "flywheelP");
