@@ -9,14 +9,11 @@ import org.firstinspires.ftc.ftccommon.internal.manualcontrol.parameters.ImuPara
 
 public class LocalizationFuser {
 
-    IMU imu;
+
     ElapsedTime elapsedTime;
+    Deadwheels deadwheels;
+
     void init(HardwareMap hardwareMap){
-        imu = hardwareMap.get(IMU.class, "imu");
-        ImuParameters params = new ImuParameters(
-                RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
-        );
 
     }
 }
