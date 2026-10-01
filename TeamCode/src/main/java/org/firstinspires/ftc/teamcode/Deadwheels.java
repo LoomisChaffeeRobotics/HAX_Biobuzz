@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -11,7 +12,17 @@ public class Deadwheels {
     private final DistanceUnit du = DistanceUnit.MM;
     private Pose2D position;
 
+    private static final double offsetX = 0.0;
+    private static final double offsetY = 0.0;
+
+
+    HardwareMap hardwareMap;
     Telemetry telemetry;
+
+    public Deadwheels(HardwareMap hardwareMap, Telemetry telemetry){
+        this.hardwareMap = hardwareMap;
+        this.telemetry = telemetry;
+    }
 
     public void init(float offsetX, float offsetY, int telemetryFrequency, Telemetry telemetryInput) {
         telemetry = telemetryInput;
