@@ -24,14 +24,12 @@ public class Deadwheels {
         this.telemetry = telemetry;
     }
 
-    public void init(float offsetX, float offsetY, int telemetryFrequency, Telemetry telemetryInput) {
-        telemetry = telemetryInput;
+    public void init(double offsetX, double offsetY) {
         pinpointDriver.recalibrateIMU();
         pinpointDriver.resetPosAndIMU();
         pinpointDriver.setOffsets(offsetX, offsetY, du);
         pinpointDriver.setEncoderResolution(100, du);
         pinpointDriver.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
-        telemetry.setMsTransmissionInterval(telemetryFrequency);
     }
 
     public void updateDeadwheelPosition() {
@@ -42,5 +40,9 @@ public class Deadwheels {
 
     public Pose2D getDeadwheelPosition() {
         return position;
+    }
+
+    public void resetPosition(Pose2D position){
+        return; //TODO: write something here to update the wheels with the new limelight position
     }
 }
