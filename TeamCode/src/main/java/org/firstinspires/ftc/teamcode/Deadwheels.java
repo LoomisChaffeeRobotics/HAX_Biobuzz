@@ -9,7 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 
 public class Deadwheels {
     private GoBildaPinpointDriver pinpointDriver;
-    private final DistanceUnit du = DistanceUnit.MM;
+    private final DistanceUnit du = DistanceUnit.INCH;
     private Pose2D position;
 
     private static final double offsetX = 0.0;
@@ -42,7 +42,7 @@ public class Deadwheels {
         return position;
     }
 
-    public void resetPosition(Pose2D position){
-        return; //TODO: write something here to update the wheels with the new limelight position
+    public void resetPosition(Pose2D positionInput) {
+       position = positionInput;
     }
 }

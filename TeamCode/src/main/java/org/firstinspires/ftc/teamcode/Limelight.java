@@ -45,8 +45,13 @@ public class Limelight{
 
     }
 
-    public boolean isReady(){
-        return false; //TODO: fill this w/ 'is april tag currently being seen'
+    public boolean limelightVisible() {
+        LLResult result = limelight.getLatestResult();
+        if (result != null) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public Pose2D getLimelightPosition() {
