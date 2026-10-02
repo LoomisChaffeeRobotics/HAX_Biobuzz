@@ -118,8 +118,6 @@ public class FieldCentricDriving {
         yaw = position.getHeading(AngleUnit.RADIANS);
         x = position.getX(DistanceUnit.INCH);
         y = position.getY(DistanceUnit.INCH);
-
-        Pose2D pos = new Pose2D(Ra)
     }
 
 
