@@ -27,15 +27,7 @@ public class Intake {
         intake.setPower(0);
     }
     void toggleHinge() {
-        if (hingeDown) {
-            hingeDown = false;
-            hinge.setPosition(hingeUpPos);
-        }
-        else{
-            hingeDown = true;
-            hinge.setPosition(hingeDownPos);
-        }
+        hinge.setPosition(hingeDown ? hingeUpPos : hingeDownPos);
+        hingeDown = !hingeDown;
     }
-
-
 }
