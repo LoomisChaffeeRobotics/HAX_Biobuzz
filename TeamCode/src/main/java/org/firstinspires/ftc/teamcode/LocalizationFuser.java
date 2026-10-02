@@ -32,13 +32,13 @@ public class LocalizationFuser {
     void init(HardwareMap hardwareMap){
         elapsedTime.reset();
         deadwheels.init(0d,0d);
-        limelight.init(0);
+        limelight.init(0); // MAKE SURE THIS LIMELIGHT PIPELINE IS CORRECT WHEN WE GET THE FIELDMAP!!!!!!
     }
 
     void update(){
         limelight.updateLimelightPosition();
         deadwheels.updateDeadwheelPosition();
-        if (elapsedTime.seconds() > 3 && limelight.isReady()) {
+        if (elapsedTime.seconds() > 3 && limelight.limelightVisible()) {
             roboPose = limelight.getLimelightPosition();
             deadwheels.resetPosition(roboPose);
             elapsedTime.reset();
