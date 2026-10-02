@@ -34,8 +34,9 @@ public class Shooter {
         rpm = 0;
     }
 
-    public void updatePose(Pose2D odomPos){
+    public void setRPMBasedOnPosition(Pose2D odomPos) {
         ///FIND RPM USING Lookuptable?
+        // Yes. Use odomPos to look up the correct RPM of the motor.
         rpm = 0;
     }
 
