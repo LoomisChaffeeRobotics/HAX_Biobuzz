@@ -24,14 +24,14 @@ public class LocalizationFuser {
     public LocalizationFuser(HardwareMap hardwareMap, Telemetry telemetry){
         this.telemetry = telemetry;
         this.hardwareMap = hardwareMap;
-        this.deadwheels = new Deadwheels(hardwareMap, telemetry);
+        this.deadwheels = new Deadwheels();
         this.limelight = new Limelight(hardwareMap, telemetry);
         this.roboPose = new Pose2D(DistanceUnit.INCH, 0,0, AngleUnit.RADIANS, 0);
     }
 
     void init(HardwareMap hardwareMap){
         elapsedTime.reset();
-        deadwheels.init(0d,0d);
+        deadwheels.init(hardwareMap, telemetry, 0d,0d);
         limelight.init(0); // MAKE SURE THIS LIMELIGHT PIPELINE IS CORRECT WHEN WE GET THE FIELDMAP!!!!!!
     }
 
@@ -51,4 +51,3 @@ public class LocalizationFuser {
         return roboPose;
     }
 }
-

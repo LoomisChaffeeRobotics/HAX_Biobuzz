@@ -9,22 +9,18 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 
 public class Deadwheels {
     private GoBildaPinpointDriver pinpointDriver;
-    private final DistanceUnit du = DistanceUnit.INCH;
+    private final DistanceUnit du = DistanceUnit.MM;
     private Pose2D position;
 
     private static final double offsetX = 0.0;
     private static final double offsetY = 0.0;
 
+    Telemetry ddtelemetry;
 
-    HardwareMap hardwareMap;
-    Telemetry telemetry;
 
-    public Deadwheels(HardwareMap hardwareMap, Telemetry telemetry){
-        this.hardwareMap = hardwareMap;
-        this.telemetry = telemetry;
-    }
-
-    public void init(double offsetX, double offsetY) {
+    public void init(HardwareMap hardwareMap, Telemetry telemetry, double offsetX, double offsetY) {
+        ddtelemetry = telemetry;
+        pinpointDriver = hardwareMap.get(GoBildaPinpointDriver.class, "dwodom");
         pinpointDriver.recalibrateIMU();
         pinpointDriver.resetPosAndIMU();
         pinpointDriver.setOffsets(offsetX, offsetY, du);
@@ -35,7 +31,6 @@ public class Deadwheels {
     public void updateDeadwheelPosition() {
         pinpointDriver.update();
         position = pinpointDriver.getPosition();
-        telemetry.addData("Position", position.toString(), "\n");
     }
 
     public Pose2D getDeadwheelPosition() {
