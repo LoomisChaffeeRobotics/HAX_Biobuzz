@@ -41,7 +41,7 @@ public class FieldCentricDriving {
         rearLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         rearRight.setDirection(DcMotorSimple.Direction.FORWARD);
-        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
 
         rearLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rearRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -78,10 +78,10 @@ public class FieldCentricDriving {
     }
 
     void simpleHDrive(double leftStick, double rightStick){
-        rearLeft.setPower(leftStick + rightStick);
-        rearRight.setPower(leftStick - rightStick);
-        frontLeft.setPower(leftStick + rightStick);
-        frontRight.setPower(leftStick - rightStick);
+        rearLeft.setPower(leftStick - rightStick);
+        rearRight.setPower(leftStick + rightStick);
+        frontLeft.setPower(leftStick - rightStick);
+        frontRight.setPower(leftStick + rightStick);
     }
 
     public double findMaxAbs(double a,double b, double c, double d, double e){

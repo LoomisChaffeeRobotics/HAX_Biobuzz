@@ -75,7 +75,7 @@ public class TeleOpTesting extends OpMode {
         newpos = new Pose2d(xpos, ypos, 0.0);
 
         gpLeft = Math.abs(gamepad1.left_stick_y) > 0.1 ? gamepad1.left_stick_y : 0;
-        gpRight = Math.abs(gamepad1.right_stick_x) > 0.1 ? gamepad1.right_stick_y : 0;
+        gpRight = Math.abs(gamepad1.right_stick_x) > 0.1 ? gamepad1.right_stick_x : 0;
 
         drive.simpleHDrive(gpLeft, gpRight);
 
