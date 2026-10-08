@@ -12,33 +12,24 @@ import static com.pedropathing.ivy.Scheduler.schedule;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 import com.pedropathing.ivy.Command;
-import com.pedropathing.ivy.Scheduler;
+
 import static com.pedropathing.ivy.Scheduler.schedule;
 import static com.pedropathing.ivy.groups.Groups.sequential;
-import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 
 @Autonomous
-public class JustPark extends OpMode {
+public class JustParkRed extends OpMode {
 
     private Follower follower;
     private final PoseFactory p = PoseFactory.degrees(); // add this
 
-    private final Pose startPose = p.of(24, 24, 0);
-    private final Pose parkPose = p.of(48, 48, 90);
-    private final Pose controlPose = p.of(36, 60, 45);
+    private final Pose startPose = p.of(7.738026124818582, 86.6298984034833, 90);
+    private final Pose parkPose = p.of(10.6, 96.2 ,90);
 
-    private final Pose scorePose = p.of(48, 48, 90);
-
-    private Path startToScore() {
-        return line(startPose, scorePose).linear(startPose, scorePose);
-    }
     private Path park(){
-        return line(scorePose, parkPose).linear(scorePose, parkPose);
+        return line(startPose, parkPose).linear(startPose, parkPose);
     }
     private Command autoRoutine() {
         return sequential(
-                follow(follower, startToScore()),
-                // Add mechanism commands here.
                 follow(follower, park())
         );
     }
@@ -54,6 +45,7 @@ public class JustPark extends OpMode {
 
     @Override
     public void start() {
+        schedule(autoRoutine());
     }
 
     @Override
