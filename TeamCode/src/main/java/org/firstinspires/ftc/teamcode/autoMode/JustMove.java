@@ -39,7 +39,7 @@ public class JustMove extends OpMode {
 
     @Override
     public void start() {
-        schedule(autoRoutine());
+        assert autoRoutine(new Pose(0.0, 0.0, 0)) != null;
     }
 
     @Override
@@ -57,10 +57,6 @@ public class JustMove extends OpMode {
     }
 
     private Command autoRoutine(Pose currentPosition) {
-        return sequential(
-                follow(follower, startToScore(currentPosition)),
-                // Add mechanism commands here.
-                follow(follower, park(currentPosition))
-        );
+        return null;
     }
 }
