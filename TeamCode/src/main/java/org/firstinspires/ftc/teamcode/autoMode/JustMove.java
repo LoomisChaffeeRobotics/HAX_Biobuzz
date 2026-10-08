@@ -13,6 +13,8 @@ import static com.pedropathing.ivy.Scheduler.schedule;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.Scheduler;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
 import static com.pedropathing.ivy.Scheduler.schedule;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
@@ -22,9 +24,9 @@ public class JustMove extends OpMode {
     private Follower follower;
     private final PoseFactory poseFactory = PoseFactory.degrees();
 
-    private final Pose startPose = poseFactory.of(24, 24, 0);
-    private final Pose scorePose = poseFactory.of(48, 48, 90);
-    private final Pose parkPose = poseFactory.of(72, 48, 90);
+    private final Pose startPose = new Pose(0.4, 0.4, 1);
+    private Pose scorePose;
+    private Pose parkPose;
 
     @Override
     public void init() {
@@ -37,7 +39,7 @@ public class JustMove extends OpMode {
 
     @Override
     public void start() {
-        schedule(autoRoutine());
+        assert autoRoutine(new Pose(0.0, 0.0, 0)) != null;
     }
 
     @Override
@@ -46,19 +48,15 @@ public class JustMove extends OpMode {
         Scheduler.execute();
     }
 
-    private Path startToScore() {
-        return line(startPose, scorePose).linear(startPose, scorePose);
+    private Path startToScore(Pose currentPosition) {
+        return line(currentPosition, scorePose).linear(currentPosition, scorePose);
     }
 
-    private Path park(){
-        return line(scorePose, parkPose).linear(scorePose, parkPose);
+    private Path park(Pose currentPosition) {
+        return line(currentPosition, parkPose).linear(currentPosition, parkPose);
     }
 
-    private Command autoRoutine() {
-        return sequential(
-                follow(follower, startToScore()),
-                // Add mechanism commands here.
-                follow(follower, park())
-        );
+    private Command autoRoutine(Pose currentPosition) {
+        return null;
     }
 }
