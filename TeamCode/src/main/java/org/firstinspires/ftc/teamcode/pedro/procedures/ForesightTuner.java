@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.pedro.procedures;
 
+import static com.pedropathing.utils.Utils.linearFit;
+import static com.pedropathing.utils.Utils.quadraticFit;
+
 import com.pedropathing.drivetrain.DrivePowers;
 import com.pedropathing.drivetrain.Drivetrain;
 import com.pedropathing.localization.Localizer;
@@ -18,6 +21,12 @@ import java.util.function.Function;
 
 import static com.pedropathing.utils.Utils.linearFit;
 import static com.pedropathing.utils.Utils.quadraticFit;
+
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Function;
 
 public class ForesightTuner extends Procedure {
     Function<HardwareMap, Localizer> localizerFunction;

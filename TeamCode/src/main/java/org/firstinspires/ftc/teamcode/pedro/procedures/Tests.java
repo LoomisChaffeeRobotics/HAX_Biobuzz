@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.pedro.procedures;
 
+import static com.pedropathing.api.Paths.curve;
+import static com.pedropathing.api.Paths.line;
+
 import com.pedropathing.algorithm.Algorithm;
 import com.pedropathing.drivetrain.DrivePowers;
 import com.pedropathing.drivetrain.Drivetrain;

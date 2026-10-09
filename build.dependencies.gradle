@@ -2,6 +2,7 @@ repositories {
     maven { url 'https://repo.dairy.foundation/releases/'}
     mavenCentral()
     google() // Needed for androidx
+    maven { url 'https://repo.dairy.foundation/releases/'}
 }
 
 dependencies {
