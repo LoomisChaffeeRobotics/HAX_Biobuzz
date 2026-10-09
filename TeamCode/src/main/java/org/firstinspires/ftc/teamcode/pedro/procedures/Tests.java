@@ -22,6 +22,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static com.pedropathing.api.Paths.curve;
+import static com.pedropathing.api.Paths.line;
+
 public class Tests extends Procedure {
     enum Test {
         @DisplayName("Hold Test")
