@@ -23,7 +23,7 @@ public class TeleOpTesting extends OpMode {
     Shooter shooterPollen;
     Shooter shooterNectar;
     FieldCentricDriving drive;
-    Deadwheels deadwheels;
+    pedroOdom deadwheels;
 
     Telemetry t2;
     FtcDashboard dash;
@@ -46,7 +46,7 @@ public class TeleOpTesting extends OpMode {
         shooterNectar = new Shooter();
         Intake = new Intake();
         drive = new FieldCentricDriving();
-        deadwheels = new Deadwheels();
+        deadwheels = new pedroOdom();
 
         /*
         shooterPollen.init(hardwareMap, "flickerP", "flywheelP");

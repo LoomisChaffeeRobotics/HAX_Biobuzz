@@ -1,16 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.ftccommon.internal.manualcontrol.parameters.ImuParameters;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
 public class LocalizationFuser {
 
@@ -18,13 +14,13 @@ public class LocalizationFuser {
     HardwareMap hardwareMap;
     Telemetry telemetry;
     ElapsedTime elapsedTime;
-    Deadwheels deadwheels;
+    pedroOdom deadwheels;
     Limelight limelight;
 
     public LocalizationFuser(HardwareMap hardwareMap, Telemetry telemetry){
         this.telemetry = telemetry;
         this.hardwareMap = hardwareMap;
-        this.deadwheels = new Deadwheels();
+        this.deadwheels = new pedroOdom();
         this.limelight = new Limelight(hardwareMap, telemetry);
         this.roboPose = new Pose2D(DistanceUnit.INCH, 0,0, AngleUnit.RADIANS, 0);
     }
