@@ -40,6 +40,9 @@ public class Shooter {
         rpm = 0;
     }
 
+    public void setRPMByHand(double RPM){
+        rpm = RPM;
+    }
     public void toggleSpinUp(){
         spinUp = !spinUp;
         if (!spinUp){
@@ -50,10 +53,16 @@ public class Shooter {
         }
 
     }
+    public boolean getSpinUp(){
+        if (abs(rpm - getFlyWheelVel()) < rpmTol){
+            return true;
+        }
+        return false;
+    }
     public double getFlyWheelVel(){return flyWheel.getVelocity() / RPMtoTicksPerSecond;}
 
     public void shoot(){
-        if (abs(rpm - getFlyWheelVel()) < rpmTol){
+        if (abs(rpm - getFlyWheelVel()) > rpmTol){
             return;
         }
         flickerBlocking = false;

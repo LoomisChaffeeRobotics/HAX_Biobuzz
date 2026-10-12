@@ -17,16 +17,16 @@ public class Intake {
         hinge = hardwareMap.get(Servo.class, "hinge");
     }
 
-    void spinIn(){
+    public void spinIn(){
         intake.setPower(intakeSpeed);
     }
-    void spinOut(){
+    public void spinOut(){
         intake.setPower(-intakeSpeed);
     }
-    void stopSpin(){
+    public void stopSpin(){
         intake.setPower(0);
     }
-    void toggleHinge() {
+    public void toggleHinge() {
         hinge.setPosition(hingeDown ? hingeUpPos : hingeDownPos);
         hingeDown = !hingeDown;
     }

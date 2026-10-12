@@ -22,10 +22,6 @@ public class TeleOpTesting extends OpMode {
 
     Shooter shooterPollen;
     Shooter shooterNectar;
-    DcMotorEx flyWheelPollen;
-    DcMotorEx flyWheelNectar;
-    DcMotor  flickerPollen;
-    DcMotor flickerNectar;
     FieldCentricDriving drive;
     Deadwheels deadwheels;
 
