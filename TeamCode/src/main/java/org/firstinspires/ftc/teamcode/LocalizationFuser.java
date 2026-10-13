@@ -21,26 +21,26 @@ public class LocalizationFuser {
         this.telemetry = telemetry;
         this.hardwareMap = hardwareMap;
         this.deadwheels = new pedroOdom();
-        this.limelight = new Limelight(hardwareMap, telemetry);
+//        this.limelight = new Limelight(); TODO: GET THE OPMODE INTO THIS
         this.roboPose = new Pose2D(DistanceUnit.INCH, 0,0, AngleUnit.RADIANS, 0);
     }
 
     void init(HardwareMap hardwareMap){
         elapsedTime.reset();
-        deadwheels.init(hardwareMap, telemetry, 0d,0d);
-        limelight.init(0); // MAKE SURE THIS LIMELIGHT PIPELINE IS CORRECT WHEN WE GET THE FIELDMAP!!!!!!
+        //deadwheels.init();
+        //limelight.init(0); // MAKE SURE THIS LIMELIGHT PIPELINE IS CORRECT WHEN WE GET THE FIELDMAP!!!!!!
     }
 
     void update(){
-        limelight.updateLimelightPosition();
-        deadwheels.updateDeadwheelPosition();
-        if (elapsedTime.seconds() > 3 && limelight.limelightVisible()) {
-            roboPose = limelight.getLimelightPosition();
-            deadwheels.resetPosition(roboPose);
-            elapsedTime.reset();
-            return;
-        }
-        roboPose = deadwheels.getDeadwheelPosition();
+//        limelight.updateLimelightPosition();
+//        deadwheels.updateDeadwheelPosition();
+//        if (elapsedTime.seconds() > 3 && limelight.limelightVisible()) {
+//            roboPose = limelight.getLimelightPosition();
+//            deadwheels.resetPosition(roboPose);
+//            elapsedTime.reset();
+//            return;
+//        }
+//        roboPose = deadwheels.getDeadwheelPosition();
     }
 
     Pose2D getPosition(){

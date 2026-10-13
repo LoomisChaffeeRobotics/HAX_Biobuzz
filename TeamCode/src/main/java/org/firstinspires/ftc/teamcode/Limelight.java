@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
@@ -23,33 +24,28 @@ import java.util.List;
 public class Limelight{
     private Limelight3A limelight;
     private Pose3D botpose;
-    Telemetry telemetry;
-    HardwareMap hardwareMap;
 
     AprilTagProcessor aprilTagProcessor;
 
     // 2. Pass it to the VisionPortal along with your webcam
     VisionPortal visionPortal;
 
-    public Limelight(HardwareMap hardwareMap, Telemetry telemetry){
-        this.hardwareMap = hardwareMap;
-        this.telemetry = telemetry;
+    OpMode opMode;
+
+    public Limelight(OpMode opMode){
+        this.opMode = opMode;
     }
 
-    public void init(int limelightPipeline, String limelightName, String webcamName) { // Set telemetryFrequency to 11ms for most things
-        limelight = hardwareMap.get(Limelight3A.class, limelightName);
+    public void init() { // Set telemetryFrequency to 11ms for most things
+        limelight = opMode.hardwareMap.get(Limelight3A.class, "limelight");
         limelight.setPollRateHz(100); // This sets how often we ask Limelight for data (100 times per second)
         limelight.start(); // This tells Limelight to start looking!
-        limelight.pipelineSwitch(limelightPipeline);
+//        limelight.pipelineSwitch(limelightPipeline);
         limelight.start();
         aprilTagProcessor = new AprilTagProcessor.Builder()
                 .setDrawTagOutline(true)      // Highlights the tag on the driver station screen
                 .setDrawTagID(true)           // Displays the ID number on the screen
                 .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES) // Sets your preferred units
-                .build();
-        visionPortal = new VisionPortal.Builder()
-                .setCamera(hardwareMap.get(WebcamName.class, webcamName))
-                .addProcessor(aprilTagProcessor) // Plugs the processor into the stream
                 .build();
     }
 
@@ -58,9 +54,6 @@ public class Limelight{
         if (result != null) {
             if (result.isValid()) {
                 botpose = result.getBotpose();
-                telemetry.addData("tx", result.getTx());
-                telemetry.addData("ty", result.getTy());
-                telemetry.addData("Botpose", botpose.toString(), "\n");
             }
         }
 
@@ -83,8 +76,11 @@ public class Limelight{
         return pose2D;
     }
 
-    @SuppressLint("DefaultLocale")
-    // Pray to god this works
+    public boolean seesTag(){
+        List<AprilTagDetection> currentDetections = aprilTagProcessor.getDetections();
+        return(!currentDetections.isEmpty());
+
+    }
     public double absValAprilTagRoll(int targetID) {
         List<AprilTagDetection> currentDetections = aprilTagProcessor.getDetections();
 
@@ -92,10 +88,7 @@ public class Limelight{
         for (AprilTagDetection detection : currentDetections) {
             if (detection.metadata != null) {
                 if (detection.id == targetID) {
-                    telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
-                    telemetry.addLine(String.format("XYZ %6.1f %6.1f %6.1f  (inch)", detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
-                    telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (RAD)", detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
-                    return detection.ftcPose.roll;
+                   return detection.ftcPose.roll;
                 }
             }
         }

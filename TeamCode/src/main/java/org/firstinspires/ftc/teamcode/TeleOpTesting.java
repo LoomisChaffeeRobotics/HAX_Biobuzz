@@ -51,7 +51,7 @@ public class TeleOpTesting extends OpMode {
         Intake = new Intake();
         drive = new FieldCentricDriving();
         pedroOdom_ = new pedroOdom();
-        limelight = new Limelight(hardwareMap, telemetry);
+        limelight = new Limelight(this);
 
         /*
         shooterPollen.init(hardwareMap, "flickerP", "flywheelP");
@@ -59,10 +59,11 @@ public class TeleOpTesting extends OpMode {
         */
 
         drive.init(hardwareMap, telemetry);
-        pedroOdom_.init();
+        pedroOdom_.init(hardwareMap, telemetry);
 
         dash = FtcDashboard.getInstance();
         t2 = dash.getTelemetry();
+        limelight.init();
     }
 
     @Override
@@ -79,9 +80,9 @@ public class TeleOpTesting extends OpMode {
         gpLeft = Math.abs(gamepad1.left_stick_y) > 0.1 ? gamepad1.left_stick_y : 0;
         gpRight = Math.abs(gamepad1.right_stick_x) > 0.1 ? gamepad1.right_stick_x : 0;
 
-        drive.simpleHDrive(gpLeft, gpRight);
+        drive.simpleHDrive(-gpLeft, -gpRight);
 
-        aprilSeen = limelight.limelightVisible();
+        aprilSeen = limelight.seesTag();
         //aprilRoll = limelight.absValAprilTagRoll(0); // CHANGE THIS LATER FOR DIFFERENT APRILTAGS!!!!!!!!!!!!
 
         /*
