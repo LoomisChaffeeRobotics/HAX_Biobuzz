@@ -41,4 +41,8 @@ public class pedroOdom extends OpMode {
         robotY = newPose.y();
         robotHeading = newPose.heading();
     }
+
+    public double[] getPosition() {
+        return new double[]{robotX, robotY, robotHeading};
+    }
 }

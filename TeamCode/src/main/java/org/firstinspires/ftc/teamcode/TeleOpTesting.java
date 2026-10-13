@@ -37,7 +37,7 @@ public class TeleOpTesting extends OpMode {
 
     double x_start_pos = 0;
     double y_start_pos = 0;
-    Pose2D pos = new Pose2D(DistanceUnit.CM, 0.0, 0.0, AngleUnit.DEGREES, 0.0);
+    Pose2D pos = new Pose2D(DistanceUnit.INCH, 0.0, 0.0, AngleUnit.DEGREES, 0.0);
     Pose2d newpos = new Pose2d(0.0, 0.0, 0.0);
 
     @Override
@@ -54,7 +54,7 @@ public class TeleOpTesting extends OpMode {
         */
 
         drive.init(hardwareMap, telemetry);
-        deadwheels.init(hardwareMap, telemetry, 10.5, 11.1);
+        deadwheels.init();
 
         dash = FtcDashboard.getInstance();
         t2 = dash.getTelemetry();
@@ -63,10 +63,12 @@ public class TeleOpTesting extends OpMode {
     @Override
     public void loop() {
 
-        deadwheels.updateDeadwheelPosition();
-        pos = deadwheels.getDeadwheelPosition();
-        xpos = pos.getX(DistanceUnit.CM) + x_start_pos;
-        ypos = pos.getY(DistanceUnit.CM) + y_start_pos;
+        deadwheels.loop();
+        double[] position_array = deadwheels.getPosition(); // x, y, heading
+
+        pos = new Pose2D(DistanceUnit.INCH, position_array[0], position_array[1], AngleUnit.DEGREES, position_array[2]);
+        xpos = pos.getX(DistanceUnit.INCH) + x_start_pos;
+        ypos = pos.getY(DistanceUnit.INCH) + y_start_pos;
 
         newpos = new Pose2d(xpos, ypos, 0.0);
 

@@ -45,7 +45,7 @@ public class Limelight{
         aprilTagProcessor = new AprilTagProcessor.Builder()
                 .setDrawTagOutline(true)      // Highlights the tag on the driver station screen
                 .setDrawTagID(true)           // Displays the ID number on the screen
-                .setOutputUnits(DistanceUnit.INCH, AngleUnit.RADIANS) // Sets your preferred units
+                .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES) // Sets your preferred units
                 .build();
         visionPortal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, webcamName))
@@ -79,7 +79,7 @@ public class Limelight{
         Position position = botpose.getPosition();
         Pose2D pose2D;
         //TODO: vv FIX THIS I DONT THINK THAT IT IS CORRECT vv
-        pose2D = new Pose2D(DistanceUnit.INCH, position.x, position.y, AngleUnit.RADIANS, botpose.getOrientation().getYaw());
+        pose2D = new Pose2D(DistanceUnit.INCH, position.x, position.y, AngleUnit.DEGREES, botpose.getOrientation().getYaw());
         return pose2D;
     }
 
