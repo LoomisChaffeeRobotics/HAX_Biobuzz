@@ -34,19 +34,12 @@ public class Limelight{
 
     public Limelight(OpMode opMode){
         this.opMode = opMode;
+        limelight = opMode.hardwareMap.get(Limelight3A.class, "limelight");
+        limelight.start();
     }
 
-    public void init() { // Set telemetryFrequency to 11ms for most things
-        limelight = opMode.hardwareMap.get(Limelight3A.class, "limelight");
-        limelight.setPollRateHz(100); // This sets how often we ask Limelight for data (100 times per second)
-        limelight.start(); // This tells Limelight to start looking!
-//        limelight.pipelineSwitch(limelightPipeline);
-        limelight.start();
-        aprilTagProcessor = new AprilTagProcessor.Builder()
-                .setDrawTagOutline(true)      // Highlights the tag on the driver station screen
-                .setDrawTagID(true)           // Displays the ID number on the screen
-                .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES) // Sets your preferred units
-                .build();
+    public void init() {
+        //beep boop im initializing.... beep.... boop.... DONE!
     }
 
     public void updateLimelightPosition() {
@@ -77,9 +70,7 @@ public class Limelight{
     }
 
     public boolean seesTag(){
-        List<AprilTagDetection> currentDetections = aprilTagProcessor.getDetections();
-        return(!currentDetections.isEmpty());
-
+        return limelight.getLatestResult().isValid();
     }
     public double absValAprilTagRoll(int targetID) {
         List<AprilTagDetection> currentDetections = aprilTagProcessor.getDetections();
