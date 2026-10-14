@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import android.annotation.SuppressLint;
 
 import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -69,8 +70,25 @@ public class Limelight{
         return pose2D;
     }
 
-    public boolean seesTag(){
-        return limelight.getLatestResult().isValid();
+    public boolean seesTag(boolean onRed){
+        com.qualcomm.hardware.limelightvision.LLResult result = limelight.getLatestResult();
+        if (!result.isValid()){
+            return false;
+        }
+
+        List<LLResultTypes.FiducialResult> tags = result.getFiducialResults();
+//        int[] redTags = {30,31,32,33,34,35,36,37};
+//        int[] blueTags = {38,39,40,41,42,43,44,45};
+        boolean onSide = false;
+
+        for (LLResultTypes.FiducialResult tag : tags){
+            if (tag.getFiducialId() < 38 == onRed) { //if both are true youre good and if both are false than youre also good (XNOR)
+                onSide = true;
+                break;
+            }
+        }
+
+        return onSide;
     }
     public double absValAprilTagRoll(int targetID) {
         List<AprilTagDetection> currentDetections = aprilTagProcessor.getDetections();

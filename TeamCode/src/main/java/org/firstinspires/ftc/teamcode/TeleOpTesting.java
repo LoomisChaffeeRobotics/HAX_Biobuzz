@@ -82,7 +82,7 @@ public class TeleOpTesting extends OpMode {
 
         drive.simpleHDrive(-gpLeft, -gpRight);
 
-        aprilSeen = limelight.seesTag();
+        aprilSeen = limelight.seesTag(false);
         //aprilRoll = limelight.absValAprilTagRoll(0); // CHANGE THIS LATER FOR DIFFERENT APRILTAGS!!!!!!!!!!!!
 
         /*
