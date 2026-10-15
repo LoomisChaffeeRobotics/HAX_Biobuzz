@@ -56,6 +56,11 @@ public class Drivetrain {
         telemetry = robot.telemetry;
     }
     public void simpleHDrive(double leftStick, double rightStick){
+        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        backRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
+
         backLeft.setPower(leftStick - rightStick);
         backRight.setPower(leftStick + rightStick);
         frontLeft.setPower(leftStick - rightStick);
