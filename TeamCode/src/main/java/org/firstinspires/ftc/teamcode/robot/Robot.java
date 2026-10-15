@@ -12,9 +12,10 @@ public class Robot {
     public final HardwareMap hardwareMap;
     public final Telemetry telemetry;
     public final Intaker intake;
-    public final drivetrain drive;
+    public final Drivetrain drive;
     public final ShooterNectar shooterN;
     public final ShooterPollen shooterP;
+    public final Localization localization;
 
     public Robot(OpMode opMode) {
         hardwareMap = opMode.hardwareMap;
@@ -24,8 +25,9 @@ public class Robot {
                 //PanelsTelemetry.INSTANCE.getFtcTelemetry()
         );
         intake = new Intaker(this);
-        drive = new drivetrain(this);
+        drive = new Drivetrain(this);
         shooterN = new ShooterNectar(this);
         shooterP = new ShooterPollen(this);
+        localization = new Localization(this);
     }
 }

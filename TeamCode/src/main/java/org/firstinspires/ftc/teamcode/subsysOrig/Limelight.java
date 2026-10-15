@@ -1,9 +1,12 @@
-package org.firstinspires.ftc.teamcode.subsysOrig;
+package org.firstinspires.ftc.teamcode;
 
 import android.annotation.SuppressLint;
 
+import com.qualcomm.hardware.limelightvision.LLFieldMap;
 import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
@@ -14,6 +17,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -23,34 +27,25 @@ import java.util.List;
 public class Limelight{
     private Limelight3A limelight;
     private Pose3D botpose;
-    Telemetry telemetry;
-    HardwareMap hardwareMap;
+
+    LLFieldMap fieldMap = new LLFieldMap();
 
     AprilTagProcessor aprilTagProcessor;
 
     // 2. Pass it to the VisionPortal along with your webcam
     VisionPortal visionPortal;
 
-    public Limelight(HardwareMap hardwareMap, Telemetry telemetry){
-        this.hardwareMap = hardwareMap;
-        this.telemetry = telemetry;
+    OpMode opMode;
+
+    public Limelight(OpMode opMode){
+        this.opMode = opMode;
+        limelight = opMode.hardwareMap.get(Limelight3A.class, "limelight");
+        limelight.pipelineSwitch(0);
+        limelight.start();
     }
 
-    public void init(int limelightPipeline, String limelightName, String webcamName) { // Set telemetryFrequency to 11ms for most things
-        limelight = hardwareMap.get(Limelight3A.class, limelightName);
-        limelight.setPollRateHz(100); // This sets how often we ask Limelight for data (100 times per second)
-        limelight.start(); // This tells Limelight to start looking!
-        limelight.pipelineSwitch(limelightPipeline);
-        limelight.start();
-        aprilTagProcessor = new AprilTagProcessor.Builder()
-                .setDrawTagOutline(true)      // Highlights the tag on the driver station screen
-                .setDrawTagID(true)           // Displays the ID number on the screen
-                .setOutputUnits(DistanceUnit.INCH, AngleUnit.RADIANS) // Sets your preferred units
-                .build();
-        visionPortal = new VisionPortal.Builder()
-                .setCamera(hardwareMap.get(WebcamName.class, webcamName))
-                .addProcessor(aprilTagProcessor) // Plugs the processor into the stream
-                .build();
+    public void init() {
+        //beep boop im initializing.... beep.... boop.... DONE!
     }
 
     public void updateLimelightPosition() {
@@ -58,9 +53,6 @@ public class Limelight{
         if (result != null) {
             if (result.isValid()) {
                 botpose = result.getBotpose();
-                telemetry.addData("tx", result.getTx());
-                telemetry.addData("ty", result.getTy());
-                telemetry.addData("Botpose", botpose.toString(), "\n");
             }
         }
 
@@ -79,12 +71,44 @@ public class Limelight{
         Position position = botpose.getPosition();
         Pose2D pose2D;
         //TODO: vv FIX THIS I DONT THINK THAT IT IS CORRECT vv
-        pose2D = new Pose2D(DistanceUnit.INCH, position.x, position.y, AngleUnit.RADIANS, botpose.getOrientation().getYaw());
+        pose2D = new Pose2D(DistanceUnit.INCH, position.x, position.y, AngleUnit.DEGREES, botpose.getOrientation().getYaw());
         return pose2D;
     }
 
-    @SuppressLint("DefaultLocale")
-    // Pray to god this works
+    private Pose3D tagPoseForTesting = new Pose3D(new Position(),new YawPitchRollAngles(AngleUnit.RADIANS,0,0,0,0));
+    public Pose3D tagPoseTest(){
+        LLResult result = limelight.getLatestResult();
+        if (!result.isValid()){
+            return tagPoseForTesting;
+        }
+        for (LLResultTypes.FiducialResult tag : result.getFiducialResults()){
+            tagPoseForTesting = tag.getTargetPoseRobotSpace();
+            opMode.telemetry.addData("new tag: ", tag.getFiducialId());
+            opMode.telemetry.addData("robo: ", tag.getRobotPoseFieldSpace());
+        }
+        return tagPoseForTesting;
+    }
+
+    public boolean seesTag(boolean onRed){
+        LLResult result = limelight.getLatestResult();
+        if (!result.isValid()){
+            return false;
+        }
+
+        List<LLResultTypes.FiducialResult> tags = result.getFiducialResults();
+//        int[] redTags = {30,31,32,33,34,35,36,37};
+//        int[] blueTags = {38,39,40,41,42,43,44,45};
+        boolean onSide = false;
+
+        for (LLResultTypes.FiducialResult tag : tags){
+            if (tag.getFiducialId() < 38 == onRed) { //if both are true youre good and if both are false than youre also good (XNOR)
+                onSide = true;
+                break;
+            }
+        }
+
+        return onSide;
+    }
     public double absValAprilTagRoll(int targetID) {
         List<AprilTagDetection> currentDetections = aprilTagProcessor.getDetections();
 
@@ -92,9 +116,6 @@ public class Limelight{
         for (AprilTagDetection detection : currentDetections) {
             if (detection.metadata != null) {
                 if (detection.id == targetID) {
-                    telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
-                    telemetry.addLine(String.format("XYZ %6.1f %6.1f %6.1f  (inch)", detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
-                    telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (RAD)", detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
                     return detection.ftcPose.roll;
                 }
             }

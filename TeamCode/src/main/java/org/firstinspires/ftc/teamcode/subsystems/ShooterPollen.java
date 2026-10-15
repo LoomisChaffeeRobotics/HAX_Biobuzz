@@ -4,11 +4,9 @@ import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.ivy.Command;
 import com.pedropathing.math.Pose;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 
 import static com.pedropathing.ivy.commands.Commands.infinite;
@@ -21,7 +19,7 @@ public class ShooterPollen {
     DcMotorEx flywheel;
     Servo flicker;
     private final Telemetry telemetry;
-    public drivetrain Drivetrain;
+    public Drivetrain Drivetrain;
     public double rpm = 0;
 
     public boolean spinUp = false;

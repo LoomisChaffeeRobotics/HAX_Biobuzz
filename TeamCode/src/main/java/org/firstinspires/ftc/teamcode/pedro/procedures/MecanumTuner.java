@@ -22,14 +22,14 @@ public class MecanumTuner extends Procedure {
 
     @Override
     public void run() throws InterruptedException {
-        Inputs motorNames = inputs("Mecanum Motor Names", "Enter the names in HardwareMap of your drivetrain motors.");
+        Inputs motorNames = inputs("Mecanum Motor Names", "Enter the names in HardwareMap of your Drivetrain motors.");
         Inputs.Field<String> frontLeftName = motorNames.s("Front Left Name");
         Inputs.Field<String> frontRightName = motorNames.s("Front Right Name");
         Inputs.Field<String> backLeftName = motorNames.s("Back Left Name");
         Inputs.Field<String> backRightName = motorNames.s("Back Right Name");
         awaitInputs(motorNames);
 
-        confirmation("Motor Directions", "Each drivetrain motor will spin, one at a time. After each one, you will enter whether it spun forward or reversed. You may use the interactive diagram to see which wheel should be spinning and which direction is forward.");
+        confirmation("Motor Directions", "Each Drivetrain motor will spin, one at a time. After each one, you will enter whether it spun forward or reversed. You may use the interactive diagram to see which wheel should be spinning and which direction is forward.");
 
         Direction frontLeftDirection = testMotor(Wheel.FRONT_LEFT, "Front Left", frontLeftName.get());
         Direction frontRightDirection = testMotor(Wheel.FRONT_RIGHT, "Front Right", frontRightName.get());

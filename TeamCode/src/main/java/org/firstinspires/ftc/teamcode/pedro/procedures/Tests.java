@@ -446,7 +446,7 @@ class TestsDriving extends TuningOpMode<Boolean> {
     Function<HardwareMap, Drivetrain> drivetrainFunction;
 
     public TestsDriving(Function<HardwareMap, Drivetrain> drivetrainFunction) {
-        super("Driving Test", "Tests raw drivetrain control without localization.", true);
+        super("Driving Test", "Tests raw Drivetrain control without localization.", true);
         this.drivetrainFunction = drivetrainFunction;
     }
 
@@ -465,7 +465,7 @@ class TestsPose extends TuningOpMode<Boolean> {
     Function<HardwareMap, Localizer> localizerFunction;
 
     public TestsPose(Function<HardwareMap, Localizer> localizerFunction) {
-        super("Pose Test", "Verifies localizer output without a drivetrain.", true);
+        super("Pose Test", "Verifies localizer output without a Drivetrain.", true);
         this.localizerFunction = localizerFunction;
     }
 

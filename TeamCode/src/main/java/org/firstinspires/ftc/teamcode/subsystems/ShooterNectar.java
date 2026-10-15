@@ -19,7 +19,7 @@ public class ShooterNectar {
     DcMotorEx flywheel;
     Servo flicker;
     private final Telemetry telemetry;
-    public drivetrain Drivetrain;
+    public Drivetrain Drivetrain;
     public double rpm = 0;
 
     public boolean spinUp = false;

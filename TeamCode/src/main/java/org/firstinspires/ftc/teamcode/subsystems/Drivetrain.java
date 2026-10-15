@@ -12,7 +12,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 //import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 //import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
@@ -24,7 +23,7 @@ import static com.pedropathing.ivy.commands.Commands.infinite;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 
 @Config
-public class drivetrain {
+public class Drivetrain {
     //public static PIDFCoefficients headingCoefficients = new PIDFCoefficients(1.75, 0, 0.09, 0);
     private final PoseFactory p = PoseFactory.degrees();
     public final DcMotorEx frontLeft;
@@ -35,7 +34,7 @@ public class drivetrain {
     private final Telemetry telemetry;
     //private final PIDFController headingController = new PIDFController(headingCoefficients);
 
-    public drivetrain(Robot robot) {
+    public Drivetrain(Robot robot) {
         follower = Constants.create(robot.hardwareMap);
         frontLeft = robot.hardwareMap.get(DcMotorEx.class, "frontLeft");
         frontRight = robot.hardwareMap.get(DcMotorEx.class, "frontRight");
