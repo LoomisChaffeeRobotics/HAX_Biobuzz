@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.acmerobotics.dashboard.config.Config;
 //import com.pedropathing.
 //import com.pedropathing.control.PIDFController;
+import com.pedropathing.drivetrain.DrivePowers;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.math.Pose;
 import com.pedropathing.ivy.Command;
@@ -21,6 +22,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import static com.pedropathing.ivy.commands.Commands.infinite;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
+import com.pedropathing.follower.ManualDrive;
 
 @Config
 public class Drivetrain {
@@ -58,6 +60,17 @@ public class Drivetrain {
         backRight.setPower(leftStick + rightStick);
         frontLeft.setPower(leftStick - rightStick);
         frontRight.setPower(leftStick + rightStick);
+    }
+
+    public void pePaDrive(double lefty, double leftx, double rightx) {
+        DrivePowers powers = ManualDrive.fieldCentric(
+                -lefty,
+                leftx,
+                rightx,
+                follower.pose().heading()
+        );
+        follower.manual(powers);
+        follower.update();
     }
 
     public Pose getPose() {

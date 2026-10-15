@@ -30,15 +30,15 @@ public class Intaker {
     }
 
     public Command on() {
-        return instant(() -> mode = Mode.ON).requiring(intakeMotor);
+        return instant(() -> mode = Mode.ON);
     }
 
     public Command off() {
-        return instant(() -> mode = Mode.OFF).requiring(intakeMotor);
+        return instant(() -> mode = Mode.OFF);
     }
 
     public Command reverse() {
-        return instant(() -> mode = Mode.REVERSE).requiring(intakeMotor);
+        return instant(() -> mode = Mode.REVERSE);
     }
 
     public Command hingeDown() { return instant(() -> HINGEMODE = hingeMode.DOWN); }
@@ -64,7 +64,7 @@ public class Intaker {
                 case DOWN:
                     hinge.setPosition(downPos);
             }
-
+            telemetry.addData("Intake Mode: ", mode);
             telemetry.addData("Intake Current", intakeMotor.getCurrent(CurrentUnit.MILLIAMPS));
             telemetry.addData("Intake Velocity", intakeMotor.getVelocity());
         });

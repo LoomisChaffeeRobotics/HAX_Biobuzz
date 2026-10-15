@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.math.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.robot.RobotOpMode;
 
 @TeleOp(name = "TeleOp", group = "Competition")
@@ -11,13 +12,15 @@ import org.firstinspires.ftc.teamcode.robot.RobotOpMode;
 public class TeleOpNew extends RobotOpMode {
     double gpLeft = 0;
     double gpRight = 0;
-    Pose curPose = robot.drive.getPose();
+    Pose curPose;
 
     @Override
     public void init(){
         super.init();
+        curPose = robot.drive.getPose();
 
     }
+
 
     @Override
     public void start(){
@@ -28,14 +31,13 @@ public class TeleOpNew extends RobotOpMode {
 
     @Override
     public void loop(){
-        gpLeft = Math.abs(gamepad1.left_stick_y) > 0.1 ? gamepad1.left_stick_y : 0;
-        gpRight = Math.abs(gamepad1.right_stick_x) > 0.1 ? gamepad1.right_stick_x : 0;
 
-        robot.drive.simpleHDrive(gpLeft, gpRight);
+        robot.drive.pePaDrive(gamepad1.left_stick_y, gamepad1.left_stick_x,gamepad1.right_stick_x);
 
         curPose = robot.drive.getPose();
 
         if (gamepad1.left_trigger > 0){
+
             robot.intake.on().schedule();
         }
         else if (gamepad1.left_bumper){
@@ -85,6 +87,6 @@ public class TeleOpNew extends RobotOpMode {
             }
         }
 
-
+        super.loop();
     }
 }
