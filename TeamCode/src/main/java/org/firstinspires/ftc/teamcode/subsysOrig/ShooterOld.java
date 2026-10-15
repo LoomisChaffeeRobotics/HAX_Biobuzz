@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.subsysOrig;
 
 import static java.lang.Math.abs;
 
@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 
-public class Shooter {
+public class ShooterOld {
     DcMotorEx flyWheel;
 
     Servo flicker;

@@ -74,4 +74,5 @@ public class Constants {
                 new Foresight(foresightConfig)
         );
     }
+
 }

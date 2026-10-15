@@ -1,17 +1,20 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.TeleOps;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.teamcode.subsysOrig.Drawing;
+import org.firstinspires.ftc.teamcode.subsysOrig.FieldCentricDriving;
+import org.firstinspires.ftc.teamcode.subsysOrig.Intake;
+import org.firstinspires.ftc.teamcode.subsysOrig.ShooterOld;
+import org.firstinspires.ftc.teamcode.subsysOrig.pedroOdom;
 
 @TeleOp
 public class TeleOpTesting extends OpMode {
@@ -20,8 +23,8 @@ public class TeleOpTesting extends OpMode {
 
     Intake Intake;
 
-    Shooter shooterPollen;
-    Shooter shooterNectar;
+    ShooterOld shooterPollen;
+    ShooterOld shooterNectar;
     FieldCentricDriving drive;
     pedroOdom deadwheels;
 
@@ -42,8 +45,8 @@ public class TeleOpTesting extends OpMode {
 
     @Override
     public void init() {
-        shooterPollen = new Shooter();
-        shooterNectar = new Shooter();
+        shooterPollen = new ShooterOld();
+        shooterNectar = new ShooterOld();
         Intake = new Intake();
         drive = new FieldCentricDriving();
         deadwheels = new pedroOdom();
@@ -62,9 +65,6 @@ public class TeleOpTesting extends OpMode {
 
     @Override
     public void loop() {
-
-        deadwheels.updateDeadwheelPosition();
-        pos = deadwheels.getDeadwheelPosition();
         xpos = pos.getX(DistanceUnit.CM) + x_start_pos;
         ypos = pos.getY(DistanceUnit.CM) + y_start_pos;
 

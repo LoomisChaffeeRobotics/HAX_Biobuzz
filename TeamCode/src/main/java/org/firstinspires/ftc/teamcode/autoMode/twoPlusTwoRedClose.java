@@ -19,15 +19,15 @@ import com.pedropathing.paths.Path;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.Intake;
-import org.firstinspires.ftc.teamcode.Shooter;
+import org.firstinspires.ftc.teamcode.subsysOrig.Intake;
+import org.firstinspires.ftc.teamcode.subsysOrig.ShooterOld;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 @Autonomous
 public class twoPlusTwoRedClose extends OpMode {
     //--------------ROBOT IMPORTS-----------------------
-    Shooter shooterPollen;
-    Shooter shooterNectar;
+    ShooterOld shooterPollen;
+    ShooterOld shooterNectar;
     Intake intake;
     //---------------------ROBOT FUNCTIONS-----------------------
     private Command spinBoth(){
@@ -54,7 +54,6 @@ public class twoPlusTwoRedClose extends OpMode {
     //-------------------PEDROPATHING CONSTANTS----------------------
     private Follower follower;
     private final PoseFactory p = PoseFactory.degrees(); // add this
-
     private final Pose startPose = p.of(56, 8, 90);
     private final Pose parkPose = p.of(10.6, 96.2 ,90);
     private final Pose flower1Pose = p.of(17, 48, 180);
@@ -64,6 +63,8 @@ public class twoPlusTwoRedClose extends OpMode {
     private final Pose shootTwoCnt2 = p.of(18, 99, 0);
     private final Pose flower2Pose = p.of(48, 123, 90);
     private final Pose flower2INPose = p.of(48, 132, 90);
+    private final Pose flower2OutPose = p.of(48, 117, 90);
+    private final Pose parking = p.of(9, 115, 270);
     private final double delayMs = 0;
     //---------------------INDIVIDUAL PATHS--------------------
     private final Path toFlowerOne = Paths.line(startPose, flower1Pose).linear(startPose, flower1Pose);
@@ -71,10 +72,11 @@ public class twoPlusTwoRedClose extends OpMode {
     private final Path shootTwoPt = Paths.curve(flower1INPose, shootTwoCnt1, shootTwoCnt2, shootTwo).linear(flower1INPose, shootTwo);
     private final Path toFlowerTwo = Paths.line(shootTwo, flower2Pose).linear(shootTwo, flower2Pose);
     private final Path flower2In = Paths.line(flower2Pose, flower2INPose).constant(flower2INPose);
-    //----------------------AUTO ROUTE---------------------------
+    private final Path flower2Out = Paths.through(flower2INPose, flower2OutPose, shootTwo).tangent();
+    private final Path park = Paths.line(shootTwo, parking).constant(parking);
+    //----------------------AUTO ROUTE---------------------------;
 
     Command auto = sequential(
-            infinite(() -> updateFuncs()),
 
             instant(() -> setRPMS(1000, 1000)),
             instant(() -> spinBoth()),
@@ -110,24 +112,25 @@ public class twoPlusTwoRedClose extends OpMode {
             ),
 
             instant(() -> intake.toggleHinge()),
-            follow(follower, flower1In),
-            waitMs(3000)
+            follow(follower, flower2In),
+            waitMs(3000),
 
+            follow(follower, flower2Out),
+            instant(() -> intake.toggleHinge()),
 
+            waitForSpin(),
+            instant(() -> shooterPollen.shoot()),
+            waitMs(4000),
+            instant(() -> shooterPollen.setBlock()),
 
-
-
-
-
-
-
+            follow(follower, park)
     );
 
     @Override
     public void init() {
         //-----------------ROBOT ACTIONS-------------------
-        shooterPollen = new Shooter();
-        shooterNectar = new Shooter();
+        shooterPollen = new ShooterOld();
+        shooterNectar = new ShooterOld();
         intake = new Intake();
 
         shooterPollen.init(hardwareMap, "flickerP", "flywheelP");
@@ -139,6 +142,10 @@ public class twoPlusTwoRedClose extends OpMode {
         follower = Constants.create(hardwareMap);
         follower.setPose(startPose);
         follower.update();
+
+        schedule(
+                infinite(() -> updateFuncs())
+        );
     }
     @Override
     public void start() {
