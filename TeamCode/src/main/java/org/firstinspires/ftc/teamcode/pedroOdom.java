@@ -10,6 +10,9 @@ import com.pedropathing.math.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 public class pedroOdom {
@@ -19,32 +22,31 @@ public class pedroOdom {
     private double robotHeading;
     private Telemetry telemetry;
 
-    public void init(HardwareMap hardwareMap, Telemetry telemetryNew) {
-        follower = Constants.create(hardwareMap);
-        telemetry = telemetryNew;
+    public void init(OpMode opMode) {
+        follower = Constants.create(opMode.hardwareMap);
+        telemetry = opMode.telemetry;
     }
 
     public void loop() {
         follower.update();
-        Pose robotPose = follower.pose(); // returns a Pose object
-
-        robotX = robotPose.x();
-        robotY = robotPose.y();
-        robotHeading = robotPose.heading();
-//
-//        telemetry.addData("Robot X", robotPose.x());
-//        telemetry.addData("Robot Y", robotPose.y());
-//        telemetry.addData("Robot Heading", Math.toDegrees(robotPose.heading()));
     }
 
-    public void overridePosition(Pose newPose) {
-        follower.setPose(newPose);
-        robotX = newPose.x();
-        robotY = newPose.y();
-        robotHeading = newPose.heading();
+    public void overridePosition(Pose2D newPose) {
+        follower.setPose(new Pose(
+                newPose.getX(DistanceUnit.INCH),
+                newPose.getY(DistanceUnit.INCH),
+                newPose.getHeading(AngleUnit.RADIANS))); // pedro stores heading in radians
+        // see https://pedropathing.com/docs/pathing/reference/coordinates for coordinates in pedro
     }
 
-    public double[] getPosition() {
-        return new double[]{robotX, robotY, robotHeading};
+    public Pose2D getPosition() {
+        Pose followerPose = follower.pose();
+
+        return new Pose2D(
+                DistanceUnit.INCH,
+                followerPose.x(),
+                followerPose.y(),
+                AngleUnit.RADIANS,
+                followerPose.heading());
     }
 }
