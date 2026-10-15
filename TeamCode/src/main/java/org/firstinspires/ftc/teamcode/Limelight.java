@@ -109,7 +109,7 @@ public class Limelight{
 
         return onSide;
     }
-    public double absValAprilTagRoll(int targetID) {
+    public double absValAprilTagRoll(int targetID) { // I guess one element from redTags or blueTags can be the input parameter for targeting.
         List<AprilTagDetection> currentDetections = aprilTagProcessor.getDetections();
 
         // Step through the list of detections and display info for each one.
