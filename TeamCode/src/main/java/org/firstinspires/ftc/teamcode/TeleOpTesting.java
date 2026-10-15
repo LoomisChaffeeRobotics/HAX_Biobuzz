@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.support.v4.app.INotificationSideChannel;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Pose2d;
@@ -39,7 +41,6 @@ public class TeleOpTesting extends OpMode {
     double x_start_pos = 0;
     double y_start_pos = 0;
     Pose2D pos = new Pose2D(DistanceUnit.INCH, 0.0, 0.0, AngleUnit.DEGREES, 0.0);
-    Pose2d newpos = new Pose2d(0.0, 0.0, 0.0);
 
     boolean aprilSeen = false;
     double aprilRoll = 0.0f;
@@ -59,7 +60,8 @@ public class TeleOpTesting extends OpMode {
         */
 
         drive.init(hardwareMap, telemetry);
-        pedroOdom_.init(hardwareMap, telemetry);
+        pedroOdom_.init(this);
+        pedroOdom_.overridePosition(pos);
 
         dash = FtcDashboard.getInstance();
         t2 = dash.getTelemetry();
@@ -70,12 +72,7 @@ public class TeleOpTesting extends OpMode {
     public void loop() {
 
         pedroOdom_.loop();
-        double[] position_array = pedroOdom_.getPosition(); // x, y, heading
-        pos = new Pose2D(DistanceUnit.INCH, position_array[0], position_array[1], AngleUnit.DEGREES, position_array[2]);
-        xpos = pos.getX(DistanceUnit.INCH) + x_start_pos;
-        ypos = pos.getY(DistanceUnit.INCH) + y_start_pos;
-
-        newpos = new Pose2d(xpos, ypos, 0.0);
+        pos = pedroOdom_.getPosition(); // x, y, heading
 
         gpLeft = Math.abs(gamepad1.left_stick_y) > 0.1 ? gamepad1.left_stick_y : 0;
         gpRight = Math.abs(gamepad1.right_stick_x) > 0.1 ? gamepad1.right_stick_x : 0;
@@ -83,9 +80,10 @@ public class TeleOpTesting extends OpMode {
         drive.simpleHDrive(-gpLeft, -gpRight);
 
         aprilSeen = limelight.seesTag(false);
+        limelight.tagPoseTest();
         //aprilRoll = limelight.absValAprilTagRoll(0); // CHANGE THIS LATER FOR DIFFERENT APRILTAGS!!!!!!!!!!!!
 
-        /*
+        /**
         if (gamepad1.left_trigger > 0){
             Intake.spinIn();
         }
@@ -132,8 +130,8 @@ public class TeleOpTesting extends OpMode {
          */
         TelemetryPacket packet = new TelemetryPacket();
         FtcDashboard.getInstance().sendTelemetryPacket(packet);
-        t2.addData("xPos", xpos);
-        t2.addData("yPos", ypos);
+        t2.addData("xPos", pos.getX(DistanceUnit.INCH));
+        t2.addData("yPos", pos.getY(DistanceUnit.INCH));
         t2.addData("Heading", pos.getHeading(AngleUnit.DEGREES));
         if (aprilSeen) {
             t2.addLine("limelight IS VISIBLE!!!!!!!!!!!!!\n\n");
@@ -149,7 +147,7 @@ public class TeleOpTesting extends OpMode {
 
         //draw robots location on field
         packet.fieldOverlay().setStroke("#3F51B5");
-        Drawing.drawRobot(packet.fieldOverlay(), newpos);
+        Drawing.drawRobot(packet.fieldOverlay(), new Pose2d(pos.getX(DistanceUnit.INCH), pos.getY(DistanceUnit.INCH), pos.getHeading(AngleUnit.RADIANS)));
         packet.fieldOverlay().setStroke("#FF51B5");
         t2.update();
     }

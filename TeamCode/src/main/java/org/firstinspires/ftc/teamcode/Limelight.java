@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import android.annotation.SuppressLint;
 
+import com.qualcomm.hardware.limelightvision.LLFieldMap;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -16,6 +17,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -25,6 +27,8 @@ import java.util.List;
 public class Limelight{
     private Limelight3A limelight;
     private Pose3D botpose;
+
+    LLFieldMap fieldMap = new LLFieldMap();
 
     AprilTagProcessor aprilTagProcessor;
 
@@ -36,6 +40,7 @@ public class Limelight{
     public Limelight(OpMode opMode){
         this.opMode = opMode;
         limelight = opMode.hardwareMap.get(Limelight3A.class, "limelight");
+        limelight.pipelineSwitch(0);
         limelight.start();
     }
 
@@ -70,8 +75,22 @@ public class Limelight{
         return pose2D;
     }
 
+    private Pose3D tagPoseForTesting = new Pose3D(new Position(),new YawPitchRollAngles(AngleUnit.RADIANS,0,0,0,0));
+    public Pose3D tagPoseTest(){
+        LLResult result = limelight.getLatestResult();
+        if (!result.isValid()){
+            return tagPoseForTesting;
+        }
+        for (LLResultTypes.FiducialResult tag : result.getFiducialResults()){
+            tagPoseForTesting = tag.getTargetPoseRobotSpace();
+            opMode.telemetry.addData("new tag: ", tag.getFiducialId());
+            opMode.telemetry.addData("robo: ", tag.getRobotPoseFieldSpace());
+        }
+        return tagPoseForTesting;
+    }
+
     public boolean seesTag(boolean onRed){
-        com.qualcomm.hardware.limelightvision.LLResult result = limelight.getLatestResult();
+        LLResult result = limelight.getLatestResult();
         if (!result.isValid()){
             return false;
         }
