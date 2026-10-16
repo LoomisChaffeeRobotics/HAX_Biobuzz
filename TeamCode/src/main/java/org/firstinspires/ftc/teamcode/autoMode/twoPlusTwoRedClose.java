@@ -24,11 +24,11 @@ public class twoPlusTwoRedClose extends RobotOpMode {
     private final Pose flower1InPose = poseFactory.of(10, 48, 180);
     private final Pose shootTwoPose = poseFactory.of(57, 123, 270);
     private final Pose shootTwoControl1 = poseFactory.of(42, 45, 0);
-    private final Pose shootTwoControl2 = poseFactory.of(18, 99, 0);
-    private final Pose flower2Pose = poseFactory.of(48, 123, 90);
-    private final Pose flower2InPose = poseFactory.of(48, 132, 90);
-    private final Pose flower2OutPose = poseFactory.of(48, 117, 90);
-    private final Pose parkingPose = poseFactory.of(9, 115, 270);
+    private final Pose shootTwoControl2 = poseFactory.of(9, 102, 0);
+    private final Pose flower2Pose = poseFactory.of(46, 123, 90);
+    private final Pose flower2InPose = poseFactory.of(46, 132, 90);
+    private final Pose flower2OutPose = poseFactory.of(46, 123, 90);
+    private final Pose parkingPose = poseFactory.of(12, 111, 270);
     private final double delayMs = 0;
 
     private final Path toFlowerOne = Paths.line(startPose, flower1Pose).linear(startPose, flower1Pose);
@@ -41,7 +41,8 @@ public class twoPlusTwoRedClose extends RobotOpMode {
     ).linear(flower1InPose, shootTwoPose);
     private final Path toFlowerTwo = Paths.line(shootTwoPose, flower2Pose).linear(shootTwoPose, flower2Pose);
     private final Path flowerTwoIn = Paths.line(flower2Pose, flower2InPose).constant(flower2InPose);
-    private final Path flowerTwoOut = Paths.through(flower2InPose, flower2OutPose, shootTwoPose).tangent();
+    private final Path flower2Out = Paths.line(flower2InPose, flower2OutPose).constant(flower2OutPose);
+    private final Path shootThreePt = Paths.line(flower2OutPose, shootTwoPose).linear(flower2OutPose, shootTwoPose);
     private final Path park = Paths.line(shootTwoPose, parkingPose).constant(parkingPose);
 
     @Override
@@ -57,6 +58,7 @@ public class twoPlusTwoRedClose extends RobotOpMode {
 
     private Command autoRoutine() {
         return sequential(
+                ///FIRST SHOOTING
                 instant(() -> {
                     robot.shooterP.setRPMByHand(1000);
                     robot.shooterN.setRPMByHand(1000);
@@ -66,10 +68,11 @@ public class twoPlusTwoRedClose extends RobotOpMode {
                     robot.shooterN.spinUp();
                 }),
                 waitMs(delayMs),
-                waitUntil(() -> robot.shooterP.getSpunUp() && robot.shooterN.getSpunUp()),
+                //waitUntil(() -> robot.shooterP.getSpunUp() && robot.shooterN.getSpunUp()),
                 instant(robot.shooterP::shoot),
                 waitMs(4000),
 
+                ///DRIVE TO FLOWER ONE
                 parallel(
                         robot.drive.followPath(toFlowerOne),
                         instant(robot.shooterP::stopShoot),
@@ -79,32 +82,43 @@ public class twoPlusTwoRedClose extends RobotOpMode {
                 robot.drive.followPath(flowerOneIn),
                 waitMs(3000),
 
+                ///DRIVE TO SHOOTING POINT TWO
                 parallel(
                         robot.drive.followPath(toSecondShoot),
                         instant(() -> {
                             robot.shooterP.setRPMByHand(1000);
                             robot.shooterN.setRPMByHand(1000);
-                        })
+                        }),
+                        robot.intake.hingeUp()
                 ),
-                waitUntil(() -> robot.shooterP.getSpunUp() && robot.shooterN.getSpunUp()),
+
+                ///SECOND SHOOTING
+                //waitUntil(() -> robot.shooterP.getSpunUp() && robot.shooterN.getSpunUp()),
                 instant(robot.shooterP::shoot),
                 waitMs(4000),
 
+                ///DRIVE TO FLOWER TWO
                 parallel(
                         robot.drive.followPath(toFlowerTwo),
                         instant(robot.shooterP::stopShoot),
                         robot.intake.on()
                 ),
-                robot.intake.hingeUp(),
+
+                robot.intake.hingeDown(),
                 robot.drive.followPath(flowerTwoIn),
                 waitMs(3000),
-                robot.drive.followPath(flowerTwoOut),
-                robot.intake.hingeDown(),
+                robot.drive.followPath(flower2Out),
+                robot.intake.hingeUp(),
 
-                waitUntil(() -> robot.shooterP.getSpunUp() && robot.shooterN.getSpunUp()),
+                ///DRIVE TO SHOOTING THREE
+                robot.drive.followPath(shootThreePt),
+
+                //waitUntil(() -> robot.shooterP.getSpunUp() && robot.shooterN.getSpunUp()),
                 instant(robot.shooterP::shoot),
                 waitMs(4000),
                 instant(robot.shooterP::stopShoot),
+
+                ///PARKING
                 robot.drive.followPath(park),
                 instant(() -> {
                     robot.shooterP.spinDown();
