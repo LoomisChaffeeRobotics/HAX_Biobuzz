@@ -5,6 +5,7 @@ import com.pedropathing.math.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.teamcode.autoMode.autoParts.Memory;
 import org.firstinspires.ftc.teamcode.robot.RobotOpMode;
 
 @TeleOp(name = "TeleOp", group = "Competition")
@@ -18,7 +19,7 @@ public class TeleOpNew extends RobotOpMode {
     @Override
     public void init(){
         super.init();
-        curPose = robot.drive.getPose();
+        curPose = Memory.endPose;
 
     }
 

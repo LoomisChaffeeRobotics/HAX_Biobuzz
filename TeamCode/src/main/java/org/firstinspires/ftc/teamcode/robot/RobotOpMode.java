@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import static com.pedropathing.ivy.Scheduler.schedule;
 
+import org.firstinspires.ftc.teamcode.autoMode.autoParts.Memory;
+
 public abstract class RobotOpMode extends OpMode {
     protected Robot robot;
 
@@ -12,7 +14,6 @@ public abstract class RobotOpMode extends OpMode {
     public void init() {
         Scheduler.reset();
         robot = new Robot(this);
-
         schedule(
                 robot.drive.periodic(),
                 robot.shooterN.periodic(),
@@ -30,5 +31,10 @@ public abstract class RobotOpMode extends OpMode {
     public void loop() {
         Scheduler.execute();
         robot.telemetry.update();
+    }
+
+    @Override
+    public void stop() {
+        Memory.endPose = robot.drive.getPose();
     }
 }
