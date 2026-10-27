@@ -1,11 +1,10 @@
 package org.firstinspires.ftc.teamcode.robot;
 
 import com.pedropathing.ivy.Scheduler;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import static com.pedropathing.ivy.Scheduler.schedule;
-
-import org.firstinspires.ftc.teamcode.autoMode.autoParts.Memory;
 
 public abstract class RobotOpMode extends OpMode {
     protected Robot robot;
@@ -35,6 +34,10 @@ public abstract class RobotOpMode extends OpMode {
 
     @Override
     public void stop() {
-        Memory.endPose = robot.drive.getPose();
+        // Only autonomous should replace the position handed off to teleop.
+        // Initialization can fail before robot is assigned.
+        if (getClass().isAnnotationPresent(Autonomous.class) && robot != null) {
+            OpModeStorage.autonomousEndPose = robot.drive.getPose();
+        }
     }
 }

@@ -4,6 +4,7 @@ import com.pedropathing.follower.Follower;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
+import org.firstinspires.ftc.teamcode.robot.OpModeStorage;
 import com.pedropathing.api.PoseFactory;
 import com.pedropathing.math.Pose;
 import static com.pedropathing.api.Paths.*;
@@ -58,5 +59,11 @@ public class JustMove extends OpMode {
 
     private Command autoRoutine(Pose currentPosition) {
         return null;
+    }
+    @Override
+    public void stop() {
+        if (follower != null) {
+            OpModeStorage.autonomousEndPose = follower.pose();
+        }
     }
 }
