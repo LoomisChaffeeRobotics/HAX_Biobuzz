@@ -48,7 +48,6 @@ public class FieldCentricDriving {
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         pid.setCoefficients(kp,ki,kd);
-        pid.init();
     }
 
     void drive(double leftX, double leftY, double rightX){
@@ -102,7 +101,6 @@ public class FieldCentricDriving {
     void setMotorPowers(double leftStickX, double leftStickY, double rightStickX){
         if (!autoDrive){
             drive(leftStickX,leftStickY,rightStickX);
-            pid.init(); // i dont want integral windup or weird stuff so i reset it
             return;
         }
         double displacementFromHiveX = x - 72d;

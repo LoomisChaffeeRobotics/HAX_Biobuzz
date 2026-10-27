@@ -29,7 +29,7 @@ public class FancyPID {
         Kd = d;
     }
 
-    public void init() {
+    public FancyPID() {
         errorSum = 0;
         errorRateOfChange = 0;
         errorSum = 0;
