@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.subsysOrig.FancyPID;
+
 @Config
 @TeleOp(name = "Shooter RPM Test", group = "Test")
 public class shooterTest extends OpMode {
@@ -21,15 +21,16 @@ public class shooterTest extends OpMode {
 
     private DcMotorEx front;
     private DcMotorEx back;
-    private double frontTargetPower = 0.0;
-    private double backTargetTps = 0.0;
+    private double frontTargetRpm = 0.0;
+    private double backTargetRpm = 0.0;
+    private static final double tpr2rpm = 60.0 / 28.0;
 
     public static double KP = 0;
     public static double ki = 0;
     public static double kd = 0;
     public static double kf = 0;
 
-    FancyPID pid = new FancyPID();
+//    FancyPID pid = new FancyPID();
 
     @Override
     public void init() {
@@ -46,37 +47,34 @@ public class shooterTest extends OpMode {
 
 
         // DcMotorEx.setVelocity expects encoder ticks per second.
-        frontTargetPower += (gamepad1.dpadDownWasPressed() ? -.1:0) + (gamepad1.dpadUpWasPressed() ? .1:0);
+        frontTargetRpm += (gamepad1.dpadDownWasPressed() ? -200:0) + (gamepad1.dpadUpWasPressed() ? 200:0);
 
         if (gamepad1.xWasPressed()){
-            frontTargetPower = 0.0;
+            frontTargetRpm = 0.0;
         }
 
-        backTargetTps += (gamepad1.yWasPressed() ? -50:0) + (gamepad1.aWasPressed() ? 50:0);
+        backTargetRpm += (gamepad1.yWasPressed() ? -100:0) + (gamepad1.aWasPressed() ? 100:0);
 
         if (gamepad1.bWasPressed()){
-            backTargetTps = 0.0;
+            backTargetRpm = 0.0;
         }
 
+        front.setVelocity(frontTargetRpm/ tpr2rpm);
+        back.setVelocity(backTargetRpm / tpr2rpm);
 
-
-        front.setPower(frontTargetPower);
-
-        pid.setTarget(backTargetTps);
-        pid.setCoefficients(KP,ki,kd);
-        pid.update(back.getVelocity());
-        back.setPower(pid.getVelocity());
 
         telemetry.addLine("Front: D-pad up/down +/-.1 power, x resets");
         telemetry.addLine("Back: Y/a +/-5 RPM, B resets");
         telemetry.addData("Motors", "front, back");
+        telemetry.addData("Front Speed: ", front.getVelocity()*tpr2rpm);
+        telemetry.addData("Back Speed: ", back.getVelocity()*tpr2rpm);
         telemetry.update();
 
-        t2.addData("Front Power: ", front.getPower());
-        t2.addData("Back Speed: ", back.getVelocity());
-        t2.addData("Back Target Velocity: ", backTargetTps);
+        t2.addData("Front Speed: ", front.getVelocity()*tpr2rpm);
+        t2.addData("Back Speed: ", back.getVelocity()*tpr2rpm);
+        t2.addData("Back Target Velocity: ", backTargetRpm);
         t2.addData("back power: ", back.getPower());
-        t2.addData("pid p: ", KP);
+//        t2.addData("pid p: ", KP);
         t2.addData("pidp motor: ",back.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER).p);
         t2.update();
     }
