@@ -11,6 +11,7 @@ import com.pedropathing.ivy.Scheduler;
 import static com.pedropathing.ivy.Scheduler.schedule;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
+import org.firstinspires.ftc.teamcode.robot.OpModeStorage;
 import com.pedropathing.ivy.Command;
 
 import static com.pedropathing.ivy.Scheduler.schedule;
@@ -52,5 +53,11 @@ public class JustParkRed extends OpMode {
     public void loop() {
         follower.update();
         Scheduler.execute();
+    }
+    @Override
+    public void stop() {
+        if (follower != null) {
+            OpModeStorage.autonomousEndPose = follower.pose();
+        }
     }
 }

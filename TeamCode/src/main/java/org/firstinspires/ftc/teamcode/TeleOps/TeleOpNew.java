@@ -4,8 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.math.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-import org.firstinspires.ftc.teamcode.autoMode.autoParts.Memory;
+import org.firstinspires.ftc.teamcode.robot.OpModeStorage;
 import org.firstinspires.ftc.teamcode.robot.RobotOpMode;
 
 @TeleOp(name = "TeleOp", group = "Competition")
@@ -17,15 +16,12 @@ public class TeleOpNew extends RobotOpMode {
     private boolean fieldCentric = true;
 
     @Override
-    public void init(){
-        super.init();
-        curPose = Memory.endPose;
-
-    }
-
-
-    @Override
     public void start(){
+        // Restore after initialization, immediately before driver control starts.
+        curPose = OpModeStorage.autonomousEndPose;
+        robot.drive.setPose(curPose);
+        robot.drive.follower.update();
+
         robot.shooterN.stopShoot();
         robot.shooterP.stopShoot();
         robot.intake.off().schedule();

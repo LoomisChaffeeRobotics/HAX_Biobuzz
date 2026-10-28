@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.pedro.Constants;
+import org.firstinspires.ftc.teamcode.robot.OpModeStorage;
 
 @Autonomous
 public class JustParkBlue extends OpMode {
@@ -52,5 +53,11 @@ public class JustParkBlue extends OpMode {
     public void loop() {
         follower.update();
         Scheduler.execute();
+    }
+    @Override
+    public void stop() {
+        if (follower != null) {
+            OpModeStorage.autonomousEndPose = follower.pose();
+        }
     }
 }

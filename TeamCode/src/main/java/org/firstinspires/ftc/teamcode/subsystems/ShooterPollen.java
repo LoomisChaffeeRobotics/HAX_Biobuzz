@@ -21,6 +21,14 @@ public class ShooterPollen {
     private final Telemetry telemetry;
     public Drivetrain Drivetrain;
     public double rpm = 0;
+    public boolean useCalculatedRPM = false;
+    // Updated by the caller; use the same distance unit as rpmLookup.
+    public double distanceFromGoal = 0;
+
+    // Add measured {distance, RPM} rows here in strictly increasing distance order.
+    // This shooter's calibration is independent of the other shooter's table.
+    public final lookUp rpmLookup = new lookUp(new double[][] {
+    });
 
     public boolean spinUp = false;
 
@@ -43,11 +51,13 @@ public class ShooterPollen {
         telemetry = robot.telemetry;
         Drivetrain = robot.drive;
     }
-    public void setRPMBasedOnPosition() {
-        ///FIND RPM USING Lookuptable?
-        // Yes. Use odomPos to look up the correct RPM of the motor.
-        curPos = Drivetrain.getPose();
-        rpm = 0;
+    /**
+     * Updates the target RPM using a distance supplied by the caller.
+     * Use the same distance unit as this shooter's calibration table.
+     * Call again whenever the distance changes. An empty table returns zero RPM.
+     */
+    public void setRPMBasedOnPosition(double distanceFromGoal) {
+        rpm = rpmLookup.getRPM(distanceFromGoal);
     }
 
     public void setRPMByHand(double RPM){
@@ -75,6 +85,10 @@ public class ShooterPollen {
 
     public Command periodic() {
         return infinite(() -> {
+            if (useCalculatedRPM) {
+                setRPMBasedOnPosition(distanceFromGoal);
+            }
+
             if (spining){
                 flywheel.setVelocity(RPMtoTicksPerSecond * rpm);
             }
