@@ -13,7 +13,9 @@ public class TeleOpNew extends RobotOpMode {
     double gpLeft = 0;
     double gpRight = 0;
     Pose curPose;
-    private boolean fieldCentric = true;
+    private boolean fieldCentricManual = true;
+
+    private boolean isRed = true;
 
     @Override
     public void start(){
@@ -29,20 +31,21 @@ public class TeleOpNew extends RobotOpMode {
 
     @Override
     public void loop(){
-        if (gamepad1.dpadLeftWasPressed()) {
-            fieldCentric = !fieldCentric;
+        if (gamepad1.options) {
+            robot.drive.setHeading(0);
         }
 
-        if (fieldCentric) {
-            robot.drive.pePaDrive(
-                    gamepad1.left_stick_y,
-                    gamepad1.left_stick_x,
-                    gamepad1.right_stick_x
-            );
-        } else {
-            robot.drive.simpleHDrive(gamepad1.left_stick_y, gamepad1.right_stick_x);
+        if (gamepad1.dpadLeftWasPressed()){
+            fieldCentricManual = !fieldCentricManual;
         }
-        telemetry.addData("Drive mode", fieldCentric ? "Field-centric" : "Simple H drive");
+
+        robot.drive.pePaDriveAuto(
+                gamepad1.left_stick_y,
+                gamepad1.left_stick_x,
+                gamepad1.right_stick_x, isRed, fieldCentricManual
+        );
+
+        telemetry.addData("Drive mode", fieldCentricManual ? "Field-centric" : "Simple H drive");
 
         curPose = robot.drive.getPose();
 
