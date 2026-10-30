@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.data.LUT;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 
 @Config
@@ -25,11 +26,6 @@ public class ShooterNectar {
     // Updated by the caller; use the same distance unit as rpmLookup.
     public double distanceFromGoal = 0;
 
-    // Add measured {distance, RPM} rows here in strictly increasing distance order.
-    // This shooter's calibration is independent of the other shooter's table.
-    public final lookUp rpmLookup = new lookUp(new double[][] {
-    });
-
     public boolean spinUp = false;
 
     public boolean flickerBlocking = true;
@@ -43,6 +39,7 @@ public class ShooterNectar {
 
     public double rpmTol = 300;
     public Pose curPos;
+    LUT lut;
 
     public ShooterNectar(Robot robot) {
         flywheel = robot.hardwareMap.get(DcMotorEx.class, "flywheelN");
@@ -57,7 +54,7 @@ public class ShooterNectar {
      * Call again whenever the distance changes. An empty table returns zero RPM.
      */
     public void setRPMBasedOnPosition(double distanceFromGoal) {
-        rpm = rpmLookup.getRPM(distanceFromGoal);
+        rpm = lut.nectarValue(distanceFromGoal);
     }
 
     public void setRPMByHand(double RPM){

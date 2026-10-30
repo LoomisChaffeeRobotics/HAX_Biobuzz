@@ -7,6 +7,9 @@ public class LUT {
     public double pollenValue(double distance){
         return pollenLauncher[indexOfRange(distance)];
     }
+    public double nectarValue(double distance){
+        return 0;
+    }
     public int indexOfRange(double distance){
         return (int) (40*distance - 26);
     }

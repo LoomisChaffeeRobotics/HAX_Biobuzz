@@ -22,7 +22,8 @@ public class shooterTest extends OpMode {
 
     private DcMotorEx front;
     private DcMotorEx back;
-    private double distance = 0.0;
+    private double distance = 1;
+    private double offsetRPM = 0.0;
     private static final double tpr2rpm = 60.0 / 28.0;
 
     public static double KP = 0;
@@ -49,19 +50,27 @@ public class shooterTest extends OpMode {
 
 
         // DcMotorEx.setVelocity expects encoder ticks per second.
-        distance += (gamepad1.dpadDownWasPressed() ? -10:0) + (gamepad1.dpadUpWasPressed() ? 10:0);
+        distance += (gamepad1.dpadDownWasPressed() ? -.1:0) + (gamepad1.dpadUpWasPressed() ? .1:0);
+        offsetRPM += (gamepad1.aWasPressed() ? -10:0) + (gamepad1.yWasPressed() ? 10:0);
 
         if (gamepad1.xWasPressed()){
             distance = 0.0;
         }
+        if (gamepad1.bWasPressed()){
+            offsetRPM = 0.0;
+        }
 
 
-        front.setVelocity(lut.pollenValue(distance) / tpr2rpm);
+        front.setVelocity((lut.pollenValue(distance) +offsetRPM) / tpr2rpm);
         back.setVelocity(4500 / tpr2rpm);
 
 
-        telemetry.addLine("Front: D-pad up/down +/- .1 meters, x resets");
+        telemetry.addLine("distance: D-pad up/down +/- .1 meters, x resets");
+        telemetry.addLine("offset: y/a +/- 10 rpm, x resets");
         telemetry.addData("Motors", "front, back");
+        telemetry.addData("LUT Front value: ", lut.pollenValue(distance));
+        telemetry.addData("offset RPM: ", offsetRPM);
+        telemetry.addData("target shooter RPM: ", lut.pollenValue(distance) +offsetRPM);
         telemetry.addData("Front Speed: ", front.getVelocity()*tpr2rpm);
         telemetry.addData("Back Speed: ", back.getVelocity()*tpr2rpm);
         telemetry.update();

@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.data.LUT;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 
 import static com.pedropathing.ivy.commands.Commands.infinite;
@@ -25,11 +26,6 @@ public class ShooterPollen {
     // Updated by the caller; use the same distance unit as rpmLookup.
     public double distanceFromGoal = 0;
 
-    // Add measured {distance, RPM} rows here in strictly increasing distance order.
-    // This shooter's calibration is independent of the other shooter's table.
-    public final lookUp rpmLookup = new lookUp(new double[][] {
-    });
-
     public boolean spinUp = false;
 
     public boolean flickerBlocking = true;
@@ -43,6 +39,7 @@ public class ShooterPollen {
 
     public double rpmTol = 300;
     public Pose curPos;
+    LUT lut;
 
     public ShooterPollen(Robot robot) {
         flywheel = robot.hardwareMap.get(DcMotorEx.class, "flywheelP");
@@ -57,7 +54,7 @@ public class ShooterPollen {
      * Call again whenever the distance changes. An empty table returns zero RPM.
      */
     public void setRPMBasedOnPosition(double distanceFromGoal) {
-        rpm = rpmLookup.getRPM(distanceFromGoal);
+        rpm = lut.pollenValue(distanceFromGoal);
     }
 
     public void setRPMByHand(double RPM){
