@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.data.LUT;
 
 @Config
 @TeleOp(name = "Shooter RPM Test", group = "Test")
@@ -21,14 +22,15 @@ public class shooterTest extends OpMode {
 
     private DcMotorEx front;
     private DcMotorEx back;
-    private double frontTargetRpm = 0.0;
-    private double backTargetRpm = 0.0;
+    private double distance = 0.0;
     private static final double tpr2rpm = 60.0 / 28.0;
 
     public static double KP = 0;
     public static double ki = 0;
     public static double kd = 0;
     public static double kf = 0;
+
+    public static LUT lut;
 
 //    FancyPID pid = new FancyPID();
 
@@ -47,24 +49,18 @@ public class shooterTest extends OpMode {
 
 
         // DcMotorEx.setVelocity expects encoder ticks per second.
-        frontTargetRpm += (gamepad1.dpadDownWasPressed() ? -200:0) + (gamepad1.dpadUpWasPressed() ? 200:0);
+        distance += (gamepad1.dpadDownWasPressed() ? -10:0) + (gamepad1.dpadUpWasPressed() ? 10:0);
 
         if (gamepad1.xWasPressed()){
-            frontTargetRpm = 0.0;
+            distance = 0.0;
         }
 
-        backTargetRpm += (gamepad1.yWasPressed() ? -100:0) + (gamepad1.aWasPressed() ? 100:0);
 
-        if (gamepad1.bWasPressed()){
-            backTargetRpm = 0.0;
-        }
-
-        front.setVelocity(frontTargetRpm/ tpr2rpm);
-        back.setVelocity(backTargetRpm / tpr2rpm);
+        front.setVelocity(lut.pollenValue(distance) / tpr2rpm);
+        back.setVelocity(4500 / tpr2rpm);
 
 
-        telemetry.addLine("Front: D-pad up/down +/-.1 power, x resets");
-        telemetry.addLine("Back: Y/a +/-5 RPM, B resets");
+        telemetry.addLine("Front: D-pad up/down +/- .1 meters, x resets");
         telemetry.addData("Motors", "front, back");
         telemetry.addData("Front Speed: ", front.getVelocity()*tpr2rpm);
         telemetry.addData("Back Speed: ", back.getVelocity()*tpr2rpm);
@@ -72,7 +68,7 @@ public class shooterTest extends OpMode {
 
         t2.addData("Front Speed: ", front.getVelocity()*tpr2rpm);
         t2.addData("Back Speed: ", back.getVelocity()*tpr2rpm);
-        t2.addData("Back Target Velocity: ", backTargetRpm);
+        t2.addLine("Back Target Velocity: 4500");
         t2.addData("back power: ", back.getPower());
 //        t2.addData("pid p: ", KP);
         t2.addData("pidp motor: ",back.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER).p);
