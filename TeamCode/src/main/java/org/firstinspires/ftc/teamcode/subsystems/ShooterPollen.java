@@ -57,7 +57,7 @@ public class ShooterPollen {
         rpm = lut.pollenValue(distanceFromGoal);
     }
 
-    public void setDistanceFromGoal(double distanceFromGoal) {
+    public void setDistanceFromHive(double distanceFromGoal) {
         this.distanceFromGoal = distanceFromGoal;
     }
 
