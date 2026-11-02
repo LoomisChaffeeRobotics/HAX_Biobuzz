@@ -53,8 +53,12 @@ public class ShooterPollen {
      * Use the same distance unit as this shooter's calibration table.
      * Call again whenever the distance changes. An empty table returns zero RPM.
      */
-    public void setRPMBasedOnPosition(double distanceFromGoal) {
+    public void setRPMBasedOnDistance(double distanceFromGoal) {
         rpm = lut.pollenValue(distanceFromGoal);
+    }
+
+    public void setDistanceFromGoal(double distanceFromGoal) {
+        this.distanceFromGoal = distanceFromGoal;
     }
 
     public void setRPMByHand(double RPM){
@@ -83,7 +87,7 @@ public class ShooterPollen {
     public Command periodic() {
         return infinite(() -> {
             if (useCalculatedRPM) {
-                setRPMBasedOnPosition(distanceFromGoal);
+                setRPMBasedOnDistance(distanceFromGoal);
             }
 
             if (spining){

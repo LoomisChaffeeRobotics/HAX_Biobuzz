@@ -37,8 +37,10 @@ public class Drivetrain {
     public final Follower follower;
     private final Telemetry telemetry;
     private FancyPID pid;
+    Pose target = p.of(0,0,0);
 
 
+    private boolean isRed = true;
     private static double TURN_KP;
     private static double TURN_KI;
     private static double TURN_KD;
@@ -50,25 +52,12 @@ public class Drivetrain {
         telemetry = robot.telemetry;
     }
 
-    public void pePaDriveAuto(double lefty, double leftx, double rightx, boolean isRed, boolean manual) {
+    public void pePaDriveAuto(double lefty, double leftx, double rightx, boolean manual) {
         if (!manual){
             pePaDrive(lefty,leftx,rightx);
             return;
         }
         Pose currentPose = follower.pose();
-        boolean yIsOver70 = (currentPose.y()>70.75);
-
-        Pose target;
-
-        if (isRed && yIsOver70){
-            target = p.of(57.5,90.5,0);
-        } else if(isRed) {
-            target = p.of(57.5,51,0);
-        } else if(yIsOver70){
-            target = p.of(84,90.5,0);
-        } else {
-            target = p.of(84,51,0);
-        }
 
         double targetAngle = Math.atan2(currentPose.x()-target.x(),currentPose.y()-target.y());
 
@@ -91,6 +80,13 @@ public class Drivetrain {
         follower.update();
     }
 
+    public double getDistanceFromHive(){
+        return follower.pose().distance(target);
+    }
+
+    public void setIsRed(boolean isRed){
+        this.isRed = isRed;
+    }
     public Pose getPose() {
         return follower.pose();
     }
@@ -110,6 +106,17 @@ public class Drivetrain {
     public Command periodic() {
         return infinite(() -> {
             follower.update();
+
+            boolean yIsOver70 = (follower.pose().y()>70.75);
+            if (isRed && yIsOver70){
+                target = p.of(57.5,90.5,0);
+            } else if(isRed) {
+                target = p.of(57.5,51,0);
+            } else if(yIsOver70){
+                target = p.of(84,90.5,0);
+            } else {
+                target = p.of(84,51,0);
+            }
 
             telemetry.addData("Current X", follower.pose().x());
             telemetry.addData("Current Y", follower.pose().y());

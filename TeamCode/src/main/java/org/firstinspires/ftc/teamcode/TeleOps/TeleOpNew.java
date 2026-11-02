@@ -27,10 +27,13 @@ public class TeleOpNew extends RobotOpMode {
         robot.shooterN.stopShoot();
         robot.shooterP.stopShoot();
         robot.intake.off().schedule();
+
+        robot.drive.setIsRed(isRed); //in past games we had this be able to be changed in-game (maybe not the best option)
     }
 
     @Override
     public void loop(){
+        update();
         if (gamepad1.options) {
             robot.drive.setHeading(0);
         }
@@ -42,12 +45,11 @@ public class TeleOpNew extends RobotOpMode {
         robot.drive.pePaDriveAuto(
                 gamepad1.left_stick_y,
                 gamepad1.left_stick_x,
-                gamepad1.right_stick_x, isRed, fieldCentricManual
+                gamepad1.right_stick_x, fieldCentricManual
         );
 
         telemetry.addData("Drive mode", fieldCentricManual ? "Field-centric" : "Simple H drive");
 
-        curPose = robot.drive.getPose();
 
         if (gamepad1.left_trigger > 0){
 
@@ -101,5 +103,10 @@ public class TeleOpNew extends RobotOpMode {
         }
 
         super.loop();
+    }
+
+    private void update(){
+        curPose = robot.drive.getPose();
+        robot.shooterP.setDistanceFromGoal(robot.drive.getDistanceFromHive());
     }
 }
