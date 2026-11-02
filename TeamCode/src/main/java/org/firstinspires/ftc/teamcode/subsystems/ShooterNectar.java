@@ -56,7 +56,9 @@ public class ShooterNectar {
     public void setRPMBasedOnPosition(double distanceFromGoal) {
         rpm = lut.nectarValue(distanceFromGoal);
     }
-
+    public void setDistanceFromHive(double distanceFromGoal) {
+        this.distanceFromGoal = distanceFromGoal;
+    }
     public void setRPMByHand(double RPM){
         rpm = RPM;
     }

@@ -107,6 +107,9 @@ public class TeleOpNew extends RobotOpMode {
 
     private void update(){
         curPose = robot.drive.getPose();
-        robot.shooterP.setDistanceFromGoal(robot.drive.getDistanceFromHive());
+
+        double distanceFromHive = robot.drive.getDistanceFromHive();
+        robot.shooterP.setDistanceFromHive(distanceFromHive);
+        robot.shooterN.setDistanceFromHive(distanceFromHive);
     }
 }
