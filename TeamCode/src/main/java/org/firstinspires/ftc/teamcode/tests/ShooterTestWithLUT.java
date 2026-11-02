@@ -11,8 +11,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.data.LUT;
 
 @Config
-@TeleOp(name = "Shooter RPM Test", group = "Test")
-public class shooterTest extends OpMode {
+@TeleOp(name = "Shooter LUT Test", group = "Test")
+public class ShooterTestWithLUT extends OpMode {
     // Match the encoder conversion used by the shooter subsystem (28 ticks/rev).
 
     FtcDashboard dash = FtcDashboard.getInstance();
