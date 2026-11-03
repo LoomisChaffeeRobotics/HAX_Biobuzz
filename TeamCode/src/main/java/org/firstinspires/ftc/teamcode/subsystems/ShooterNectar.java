@@ -45,7 +45,7 @@ public class ShooterNectar {
     public ShooterNectar(Robot robot) {
         flywheel = robot.hardwareMap.get(DcMotorEx.class, "flywheelN");
         flicker = robot.hardwareMap.get(Servo.class, "flickerN");
-        feeder = robot.hardwareMap.get(DcMotorEx.class, "FeederN");
+        feeder = robot.hardwareMap.get(DcMotorEx.class, "feeder");
 
         telemetry = robot.telemetry;
         Drivetrain = robot.drive;

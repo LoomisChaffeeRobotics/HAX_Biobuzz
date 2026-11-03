@@ -45,7 +45,7 @@ public class ShooterPollen {
     public ShooterPollen(Robot robot) {
         flywheel = robot.hardwareMap.get(DcMotorEx.class, "flywheelP");
         flicker = robot.hardwareMap.get(Servo.class, "flickerP");
-        feeder = robot.hardwareMap.get(DcMotorEx.class, "feederP");
+        feeder = robot.hardwareMap.get(DcMotorEx.class, "feeder");
 
         telemetry = robot.telemetry;
         Drivetrain = robot.drive;
