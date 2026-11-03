@@ -8,6 +8,7 @@ import com.pedropathing.tuning.autotune.Procedure;
 import com.pedropathing.tuning.autotune.Tuner;
 
 import org.firstinspires.ftc.teamcode.pedro.procedures.ForesightTuner;
+import org.firstinspires.ftc.teamcode.pedro.procedures.MecanumTuner;
 import org.firstinspires.ftc.teamcode.pedro.procedures.PinpointTuner;
 import org.firstinspires.ftc.teamcode.pedro.procedures.Tests;
 public class Tuning {
@@ -22,5 +23,9 @@ public class Tuning {
     @Tuner
     public static Procedure foresightTuner() {
         return new ForesightTuner((hardwareMap) -> new PinpointLocalizer(hardwareMap, Constants.localizerConfig), (hardwareMap) -> new Mecanum(hardwareMap, Constants.driveConfig));
+    }
+    @Tuner
+    public static Procedure mecanumTuner() {
+        return new MecanumTuner();
     }
 }

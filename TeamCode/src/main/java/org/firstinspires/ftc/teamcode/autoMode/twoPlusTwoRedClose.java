@@ -14,8 +14,14 @@ import static com.pedropathing.ivy.commands.Commands.instant;
 import static com.pedropathing.ivy.commands.Commands.waitMs;
 import static com.pedropathing.ivy.commands.Commands.waitUntil;
 import static com.pedropathing.ivy.groups.Groups.parallel;
+import static com.pedropathing.ivy.groups.Groups.race;
 import static com.pedropathing.ivy.groups.Groups.sequential;
+
+import android.graphics.drawable.Drawable;
+
 import org.firstinspires.ftc.teamcode.pedro.Constants;
+
+import javax.net.ssl.CertPathTrustManagerParameters;
 
 
 @Autonomous(name = "Two Plus Two Red Close", group = "Competition")
@@ -34,6 +40,7 @@ public class twoPlusTwoRedClose extends RobotOpMode {
     private final Pose flower2OutPose = poseFactory.of(46, 123, 90);
     private final Pose parkingPose = poseFactory.of(12, 111, 0);
     private final double delayMs = 0;
+    private final double flowerEntryTimeoutMs = 500;
 
     private final Path toFlowerOne = Paths.line(startPose, flower1Pose).linear(startPose, flower1Pose);
     private final Path flowerOneIn = Paths.line(flower1Pose, flower1InPose).constant(flower1InPose)
@@ -62,6 +69,20 @@ public class twoPlusTwoRedClose extends RobotOpMode {
         schedule(autoRoutine());
     }
 
+    private Command driveIntoFlower(Path path) {
+        // This timer starts with the command, even if the wall prevents reaching the path end.
+        return race(
+                waitMs(flowerEntryTimeoutMs),
+                Command.build()
+                        .setStart(() -> robot.drive.follower.follow(path))
+                        .setDone(robot.drive.follower::atParametricEnd)
+                        .setEnd(condition -> {
+                            robot.drive.follower.stop();
+                            robot.drive.follower.update();
+                        })
+        );
+    }
+
     private Command autoRoutine() {
         return sequential(
                 ///FIRST SHOOTING
@@ -85,7 +106,7 @@ public class twoPlusTwoRedClose extends RobotOpMode {
                         robot.intake.on()
                 ),
                 robot.intake.hingeDown(),
-                robot.drive.followPath(flowerOneIn),
+                driveIntoFlower(flowerOneIn),
                 waitMs(3000),
 
                 ///DRIVE TO SHOOTING POINT TWO
@@ -111,7 +132,7 @@ public class twoPlusTwoRedClose extends RobotOpMode {
                 ),
 
                 robot.intake.hingeDown(),
-                robot.drive.followPath(flowerTwoIn),
+                driveIntoFlower(flowerTwoIn),
                 waitMs(3000),
                 robot.drive.followPath(flower2Out),
                 robot.intake.hingeUp(),
