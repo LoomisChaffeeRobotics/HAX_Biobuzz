@@ -19,6 +19,7 @@ public class ShooterNectar {
     public static double overrideTarget = 1000;
     DcMotorEx flywheel;
     Servo flicker;
+    DcMotorEx feeder;
     private final Telemetry telemetry;
     public Drivetrain Drivetrain;
     public double rpm = 0;
@@ -44,6 +45,7 @@ public class ShooterNectar {
     public ShooterNectar(Robot robot) {
         flywheel = robot.hardwareMap.get(DcMotorEx.class, "flywheelN");
         flicker = robot.hardwareMap.get(Servo.class, "flickerN");
+        feeder = robot.hardwareMap.get(DcMotorEx.class, "FeederN");
 
         telemetry = robot.telemetry;
         Drivetrain = robot.drive;
@@ -90,9 +92,11 @@ public class ShooterNectar {
 
             if (spining){
                 flywheel.setVelocity(RPMtoTicksPerSecond * rpm);
+                feeder.setVelocity(4500 * rpm);
             }
             else {
                 flywheel.setVelocity(0);
+                feeder.setVelocity(0);
             }
 
             if (shooting){

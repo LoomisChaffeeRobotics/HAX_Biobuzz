@@ -19,6 +19,7 @@ public class ShooterPollen {
     public static double overrideTarget = 1000;
     DcMotorEx flywheel;
     Servo flicker;
+    DcMotorEx feeder;
     private final Telemetry telemetry;
     public Drivetrain Drivetrain;
     public double rpm = 0;
@@ -44,6 +45,7 @@ public class ShooterPollen {
     public ShooterPollen(Robot robot) {
         flywheel = robot.hardwareMap.get(DcMotorEx.class, "flywheelP");
         flicker = robot.hardwareMap.get(Servo.class, "flickerP");
+        feeder = robot.hardwareMap.get(DcMotorEx.class, "feederP");
 
         telemetry = robot.telemetry;
         Drivetrain = robot.drive;
@@ -92,9 +94,11 @@ public class ShooterPollen {
 
             if (spining){
                 flywheel.setVelocity(RPMtoTicksPerSecond * rpm);
+                feeder.setVelocity(4500 * rpm);
             }
             else {
                 flywheel.setVelocity(0);
+                feeder.setVelocity(0);
             }
 
             if (shooting){
