@@ -7,10 +7,8 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 public class Limelight {
     private Limelight3A limelight;
@@ -19,6 +17,7 @@ public class Limelight {
     private Telemetry telemetry;
 
     public enum TagSet {RED_FRONT, RED_BACK, BLUE_FRONT, BLUE_BACK, NO_TAGS};
+    private final static double THREESQRTTHREE = 5.19615242271;
 
 
     public Limelight (Robot robot){
@@ -67,21 +66,21 @@ public class Limelight {
 
     public double turnError(TagSet tagSet){
         int[] tags = getTags(tagSet);
-        double[][] tagPositions = pixelList(tags);
+        double[][] tagPositions = positionList(tags);
         List<Integer> activeTags = tagsActive(tagPositions);
         double[] center = center(tagPositions,activeTags);
-        return center[0];
+        return (Math.atan2(center[1],center[0]));
     }
     public double turnErrorWithTelemetry(TagSet tagSet){
         int[] tags = getTags(tagSet);
         telemetry.addData("tags Seen: ", tags);
-        double[][] tagPositions = pixelList(tags);
+        double[][] tagPositions = positionList(tags);
         telemetry.addData("tag Positions: ", tagPositions);
         List<Integer> activeTags = tagsActive(tagPositions);
         telemetry.addData("active tags: ", activeTags);
         double[] center = center(tagPositions,activeTags);
         telemetry.addData("center: ", center);
-        return center[0];
+        return (Math.atan2(center[1],center[0]));
     }
 
     private List<Integer> tagsActive(double[][] tagPositions){
@@ -101,90 +100,82 @@ public class Limelight {
         if (active == List.of(0,1,2,3)){
             double averageX = (tagPositions[0][0]+tagPositions[1][0]+tagPositions[2][0]+tagPositions[3][0])/4;
             double averageY = (tagPositions[0][1]+tagPositions[1][1]+tagPositions[2][1]+tagPositions[3][1])/4;
-            double averageD = (tagPositions[0][2]+tagPositions[1][2]+tagPositions[2][2]+tagPositions[3][2])/4;
-            average = new double[]{averageX, averageY, averageD};
-            predicted2Displacement = new double[]{tagPositions[2][0] - averageX, tagPositions[2][1] - averageY};}
-        else if(active == List.of(0,1,2)){
+            double averageZ = (tagPositions[0][2]+tagPositions[1][2]+tagPositions[2][2]+tagPositions[3][2])/4;
+            average = new double[]{averageX, averageY, averageZ};
+            predicted2Displacement = new double[]{tagPositions[2][0] - averageX, tagPositions[2][1] - averageY,tagPositions[2][2] - averageZ};}
+        else if(active.contains(1) && active.contains(2)){
             double averageX = (tagPositions[1][0]+tagPositions[2][0])/2;
             double averageY = (tagPositions[1][1]+tagPositions[2][1])/2;
-            double averageD = (tagPositions[1][2]+tagPositions[2][2])/2;
-            average = new double[]{averageX, averageY, averageD};
-            predicted2Displacement = new double[]{tagPositions[2][0] - averageX, tagPositions[2][1] - averageY};
-        }
-        else if(active == List.of(1,2,3)){
-            double averageX = (tagPositions[1][0]+tagPositions[2][0])/2;
-            double averageY = (tagPositions[1][1]+tagPositions[2][1])/2;
-            double averageD = (tagPositions[1][2]+tagPositions[2][2])/2;
-            average = new double[]{averageX, averageY, averageD};
-            predicted2Displacement = new double[]{tagPositions[2][0] - averageX, tagPositions[2][1] - averageY};
-        }
-        else if(active == List.of(1,2)){
-            double averageX = (tagPositions[1][0]+tagPositions[2][0])/2;
-            double averageY = (tagPositions[1][1]+tagPositions[2][1])/2;
-            double averageD = (tagPositions[1][2]+tagPositions[2][2])/2;
-            average = new double[]{averageX, averageY, averageD};
-            predicted2Displacement = new double[]{tagPositions[2][0] - averageX, tagPositions[2][1] - averageY};
+            double averageZ = (tagPositions[1][2]+tagPositions[2][2])/2;
+            average = new double[]{averageX, averageY, averageZ};
+            predicted2Displacement = new double[]{tagPositions[2][0] - averageX, tagPositions[2][1] - averageY,tagPositions[2][2] - averageZ};
         }
         else if(active == List.of(0,2)){
             double averageX = (3*tagPositions[0][0]+6.5*tagPositions[2][0])/9.5;
             double averageY = (3*tagPositions[0][1]+6.5*tagPositions[2][1])/9.5;
-            double averageD = (3*tagPositions[0][2]+6.5*tagPositions[2][2])/9.5;
-            average = new double[]{averageX, averageY, averageD};
-            predicted2Displacement = new double[]{tagPositions[2][0] - averageX, tagPositions[2][1] - averageY};
+            double averageZ = (3*tagPositions[0][2]+6.5*tagPositions[2][2])/9.5;
+            average = new double[]{averageX, averageY, averageZ};
+            predicted2Displacement = new double[]{tagPositions[2][0] - averageX, tagPositions[2][1] - averageY,tagPositions[2][2] - averageZ};
         }
         else if(active == List.of(1,3)){
             double averageX = (6.5*tagPositions[1][0]+3*tagPositions[3][0])/9.5;
             double averageY = (6.5*tagPositions[1][1]+3*tagPositions[3][1])/9.5;
-            double averageD = (6.5*tagPositions[1][2]+3*tagPositions[3][2])/9.5;
-            average = new double[]{averageX, averageY, averageD};
+            double averageZ = (6.5*tagPositions[1][2]+3*tagPositions[3][2])/9.5;
+            average = new double[]{averageX, averageY, averageZ};
             double p2dx = (3 * tagPositions[3][0] + 3.5 * averageX)/6.5;
             double p2dy = (3 * tagPositions[3][1] + 3.5 * averageY)/6.5;
-            predicted2Displacement = new double[]{p2dx,p2dy};
+            double p2dz = (3 * tagPositions[3][2] + 3.5 * averageY)/6.5;
+            predicted2Displacement = new double[]{p2dx,p2dy,p2dz};
         }
         else if(active == List.of(0,1)){
             double averageX = (-3*tagPositions[0][0]+6.5*tagPositions[1][0])/3.5;
             double averageY = (-3*tagPositions[0][1]+6.5*tagPositions[1][1])/3.5;
-            double averageD = (-3*tagPositions[0][2]+6.5*tagPositions[1][2])/3.5;
-            average = new double[]{averageX, averageY, averageD};
+            double averageZ = (-3*tagPositions[0][2]+6.5*tagPositions[1][2])/3.5;
+            average = new double[]{averageX, averageY, averageZ};
             double p2dx = (-3 * tagPositions[0][0] + 9.5 * averageX)/6.5;
             double p2dy = (-3 * tagPositions[0][1] + 9.5 * averageY)/6.5;
-            predicted2Displacement = new double[]{p2dx,p2dy};
+            double p2dz = (-3 * tagPositions[0][2] + 9.5 * averageY)/6.5;
+            predicted2Displacement = new double[]{p2dx,p2dy,p2dz};
         }
         else if(active == List.of(2,3)){
             double averageX = (6.5*tagPositions[2][0]-3*tagPositions[3][0])/3.5;
             double averageY = (6.5*tagPositions[2][1]-3*tagPositions[3][1])/3.5;
-            double averageD = (6.5*tagPositions[2][2]-3*tagPositions[3][2])/3.5;
-            average = new double[]{averageX, averageY, averageD};
-            predicted2Displacement = new double[]{tagPositions[2][0] - averageX, tagPositions[2][1] - averageY};
+            double averageZ = (6.5*tagPositions[2][2]-3*tagPositions[3][2])/3.5;
+            average = new double[]{averageX, averageY, averageZ};
+            predicted2Displacement = new double[]{tagPositions[2][0] - averageX, tagPositions[2][1] - averageY,tagPositions[2][2] - averageZ};
         }
         else if(active == List.of(0,2,3)){
             double averageX = (tagPositions[0][0]+tagPositions[3][0])/2;
             double averageY = (tagPositions[0][1]+tagPositions[3][1])/2;
-            double averageD = (tagPositions[0][2]+tagPositions[3][2])/2;
-            average = new double[]{averageX, averageY, averageD};
-            predicted2Displacement = new double[]{tagPositions[2][0] - averageX, tagPositions[2][1] - averageY};
+            double averageZ = (tagPositions[0][2]+tagPositions[3][2])/2;
+            average = new double[]{averageX, averageY, averageZ};
+            predicted2Displacement = new double[]{tagPositions[2][0] - averageX, tagPositions[2][1] - averageY,tagPositions[2][2] - averageZ};
         }
         else if(active.contains(0)&& active.contains(3)){ // both 0,3 and 0,1,3 are included
             double averageX = (tagPositions[0][0]+tagPositions[3][0])/2;
             double averageY = (tagPositions[0][1]+tagPositions[3][1])/2;
-            double averageD = (tagPositions[0][2]+tagPositions[3][2])/2;
-            average = new double[]{averageX, averageY, averageD};
+            double averageZ = (tagPositions[0][2]+tagPositions[3][2])/2;
+            average = new double[]{averageX, averageY, averageZ};
             double p2dx = (3 * tagPositions[3][0] + 3.5 * averageX)/6.5;
             double p2dy = (3 * tagPositions[3][1] + 3.5 * averageY)/6.5;
-            predicted2Displacement = new double[]{p2dx,p2dy};
+            double p2dz = (3 * tagPositions[3][2] + 3.5 * averageY)/6.5;
+            predicted2Displacement = new double[]{p2dx,p2dy,p2dz};
         }
         else{ //only 1 or 0 tags seen
             return new double[]{0.0,0.0,0.0};
         }
+        telemetry.addData("average: ", average);
+        telemetry.addData("p2d: ", predicted2Displacement);
 
+        double beta = Math.atan2(predicted2Displacement[0],predicted2Displacement[1]);
         //rotation and scaling of p2 around average
         return new double[]{
-                -2*predicted2Displacement[1]+average[0]+average[1],
-                2*predicted2Displacement[0]-average[0]+average[1],
-                average[2]
+            average[0] - THREESQRTTHREE * Math.cos(beta),
+            average[1] + THREESQRTTHREE * Math.sin(beta),
+            average[2] + 3.0
         };
     }
-    private double[][] pixelList(int[] tags){
+    private double[][] positionList(int[] tags){
 
         double[][] tagPositions = new double[][]{{0.0,0.0,0.0},{0.0,0.0,0.0},{0.0,0.0,0.0},{0.0,0.0,0.0}};
 
@@ -194,9 +185,9 @@ public class Limelight {
                 continue;
             }
             tagPositions[index] = new double[]{
-                    tag.getTargetXPixels(),
-                    tag.getTargetYPixels(),
-                    tag.getTargetPoseRobotSpace().getPosition().x
+                    tag.getTargetPoseRobotSpace().getPosition().x,
+                    tag.getTargetPoseRobotSpace().getPosition().y,
+                    tag.getTargetPoseRobotSpace().getPosition().z
             };
         }
 
