@@ -69,7 +69,7 @@ public class CoopFar extends RobotOpMode {
                     robot.shooterP.setRPMByHand(1100); //FAR value
                     robot.shooterP.spinUp();
                 }),
-                waitUntil(() -> robot.localization.seesTag(onRed))
+                waitUntil(() -> robot.drive.llSeesTag(onRed))
                         .with(waitMs(3000)),//spin up time
                 instant(() -> robot.shooterP.shoot()),
                 waitMs(5000), //shoot time

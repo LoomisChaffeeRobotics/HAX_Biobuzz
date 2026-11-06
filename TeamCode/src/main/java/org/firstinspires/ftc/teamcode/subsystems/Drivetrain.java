@@ -36,8 +36,10 @@ public class Drivetrain {
 //    public final DcMotorEx backRight;
     public final Follower follower;
     private final Telemetry telemetry;
+    public final Limelight limelight;
     private FancyPID pid;
     Pose target = p.of(0,0,0);
+    Limelight.TagSet tagSet;
 
 
     private boolean isRed = true;
@@ -50,6 +52,11 @@ public class Drivetrain {
         follower = Constants.create(robot.hardwareMap);
         pid = new FancyPID();
         telemetry = robot.telemetry;
+        limelight = new Limelight(robot);
+    }
+
+    public boolean llSeesTag(boolean onRed){
+        return limelight.seesTag(onRed);
     }
 
     public void pePaDriveAuto(double lefty, double leftx, double rightx, boolean manual) {
@@ -57,13 +64,10 @@ public class Drivetrain {
             pePaDrive(lefty,leftx,rightx);
             return;
         }
-        Pose currentPose = follower.pose();
 
-        double targetAngle = Math.atan2(currentPose.x()-target.x(),currentPose.y()-target.y());
-
-        pid.setTarget(targetAngle);
+        pid.setTarget(0);
         pid.setCoefficients(TURN_KP,TURN_KI,TURN_KD);
-        pid.update(currentPose.heading());
+        pid.update(limelight.turnError(tagSet));
 
         double simulatedRX = pid.getVelocity();
 
@@ -110,12 +114,16 @@ public class Drivetrain {
             boolean yIsOver70 = (follower.pose().y()>70.75);
             if (isRed && yIsOver70){
                 target = p.of(57.5,90.5,0);
+                tagSet = Limelight.TagSet.RED_BACK;
             } else if(isRed) {
                 target = p.of(57.5,51,0);
+                tagSet = Limelight.TagSet.RED_FRONT;
             } else if(yIsOver70){
                 target = p.of(84,90.5,0);
+                tagSet = Limelight.TagSet.BLUE_FRONT;
             } else {
                 target = p.of(84,51,0);
+                tagSet = Limelight.TagSet.BLUE_BACK;
             }
 
             telemetry.addData("Current X", follower.pose().x());

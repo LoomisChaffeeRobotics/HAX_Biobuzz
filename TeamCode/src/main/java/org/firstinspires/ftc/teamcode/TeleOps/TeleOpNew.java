@@ -48,8 +48,6 @@ public class TeleOpNew extends RobotOpMode {
                 gamepad1.right_stick_x, fieldCentricManual
         );
 
-        telemetry.addData("Drive mode", fieldCentricManual ? "Field-centric" : "Simple H drive");
-
 
         if (gamepad1.left_trigger > 0){
 
@@ -106,6 +104,8 @@ public class TeleOpNew extends RobotOpMode {
     }
 
     private void update(){
+        telemetry.addData("Drive mode", fieldCentricManual ? "Field-centric" : "Not Field-centric");
+//        telemetry.addData("Tags seen: ", robot.localization.tagsSeen(isRed));
         curPose = robot.drive.getPose();
 
         double distanceFromHive = robot.drive.getDistanceFromHive();

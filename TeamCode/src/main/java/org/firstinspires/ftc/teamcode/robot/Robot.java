@@ -15,7 +15,6 @@ public class Robot {
     public final Drivetrain drive;
     public final ShooterNectar shooterN;
     public final ShooterPollen shooterP;
-    public final Localization localization;
 
     public Robot(OpMode opMode) {
         hardwareMap = opMode.hardwareMap;
@@ -28,6 +27,5 @@ public class Robot {
         drive = new Drivetrain(this);
         shooterN = new ShooterNectar(this);
         shooterP = new ShooterPollen(this);
-        localization = new Localization(this);
     }
 }
