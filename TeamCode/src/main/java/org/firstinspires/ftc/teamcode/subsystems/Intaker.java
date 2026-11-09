@@ -14,7 +14,7 @@ import static com.pedropathing.ivy.commands.Commands.*;
 public class Intaker {
     private Mode mode = Mode.OFF;
     private hingeMode HINGEMODE = hingeMode.UP;
-    public static double onPower = 1;
+    public static double onPower = .5;
     public static double offPower = 0;
     public static double reversePower = -1;
     public static double upPos = 0;
