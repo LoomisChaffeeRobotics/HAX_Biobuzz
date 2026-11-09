@@ -13,5 +13,6 @@ public class LLTest extends RobotOpMode {
     public void loop() {
         super.loop();
         robot.drive.limelight.turnErrorWithTelemetry(Limelight.TagSet.RED_FRONT);
+        telemetry.addData("canshoot", robot.drive.isHiveUp());
     }
 }

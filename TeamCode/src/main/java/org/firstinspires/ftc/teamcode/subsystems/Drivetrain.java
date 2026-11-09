@@ -84,6 +84,10 @@ public class Drivetrain {
         follower.update();
     }
 
+    public boolean isHiveUp(){
+        return limelight.isHiveUp(tagSet);
+    }
+
     public double getDistanceFromHive(){
         return follower.pose().distance(target);
     }

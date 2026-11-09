@@ -219,4 +219,16 @@ public class Limelight {
         return -1;
     }
 
+    public boolean isHiveUp(TagSet tagSet){
+        for(LLResultTypes.FiducialResult tag : result.getFiducialResults()){
+            if (includes(getTags(tagSet),tag.getFiducialId()) == -1){
+                continue;
+            }
+            if (tag.getTargetPoseRobotSpace().getPosition().z > 40){
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
