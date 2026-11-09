@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.data.LUT;
@@ -22,6 +23,7 @@ public class ShooterTestWithRPM extends OpMode {
 
     private DcMotorEx front;
     private DcMotorEx back;
+    private Servo flicker;
     private double shooterRpm = 0;
     private double FEEDER_RPM = 4500;
     private static final double tpr2rpm = 60.0 / 28.0;
@@ -39,6 +41,7 @@ public class ShooterTestWithRPM extends OpMode {
     public void init() {
         front = hardwareMap.get(DcMotorEx.class, "front");
         back = hardwareMap.get(DcMotorEx.class, "back");
+        flicker = hardwareMap.get(Servo.class, "flicker");
         telemetry.addLine("Front: D-pad up/down +/-1 power, x resets");
         telemetry.addLine("Back: Y/a +/-5 RPM, B resets");
         telemetry.addData("Motors", "front, back");
@@ -57,8 +60,17 @@ public class ShooterTestWithRPM extends OpMode {
         }
 
 
-        front.setVelocity(FEEDER_RPM / tpr2rpm);
-        back.setVelocity(shooterRpm / tpr2rpm);
+        front.setVelocity(FEEDER_RPM / tpr2rpm* (gamepad1.b? 1:0));
+        back.setVelocity(shooterRpm / tpr2rpm * (gamepad1.b? 1:0));
+
+        if (gamepad1.a){
+            flicker.setPosition(0.4);
+        }
+        if (gamepad1.y){
+            flicker.setPosition(0.8);
+        }
+
+
 
 
         telemetry.addLine("distance: D-pad up/down +/- .1 meters, x resets");
