@@ -21,8 +21,8 @@ public class ShooterTestWithRPM extends OpMode {
 //    private static final double tpr2rpm = 60.0 / 28.0;
 //    private static final double RPM_STEP = 0.025;
 
-    private DcMotorEx front;
-    private DcMotorEx back;
+    private DcMotorEx feeder;
+    private DcMotorEx shooterP;
     private Servo flicker;
     private double shooterRpm = 0;
     private double FEEDER_RPM = 4500;
@@ -39,8 +39,8 @@ public class ShooterTestWithRPM extends OpMode {
 
     @Override
     public void init() {
-        front = hardwareMap.get(DcMotorEx.class, "front");
-        back = hardwareMap.get(DcMotorEx.class, "back");
+        feeder = hardwareMap.get(DcMotorEx.class, "feeder");
+        shooterP = hardwareMap.get(DcMotorEx.class, "shooterP");
         flicker = hardwareMap.get(Servo.class, "flicker");
         telemetry.addLine("Front: D-pad up/down +/-1 power, x resets");
         telemetry.addLine("Back: Y/a +/-5 RPM, B resets");
@@ -60,8 +60,8 @@ public class ShooterTestWithRPM extends OpMode {
         }
 
 
-        front.setVelocity(FEEDER_RPM / tpr2rpm* (gamepad1.b? 1:0));
-        back.setVelocity(shooterRpm / tpr2rpm * (gamepad1.b? 1:0));
+        feeder.setVelocity(FEEDER_RPM / tpr2rpm* (gamepad1.b? 1:0));
+        shooterP.setVelocity(shooterRpm / tpr2rpm * (gamepad1.b? 1:0));
 
         if (gamepad1.a){
             flicker.setPosition(0.4);
@@ -77,22 +77,22 @@ public class ShooterTestWithRPM extends OpMode {
         telemetry.addData("Motors", "front, back");
         telemetry.addLine("Back Target Velocity: 4500");
         telemetry.addData("target shooter RPM: ", shooterRpm);
-        telemetry.addData("Front Speed: ", front.getVelocity()*tpr2rpm);
-        telemetry.addData("Back Speed: ", back.getVelocity()*tpr2rpm);
+        telemetry.addData("Front Speed: ", feeder.getVelocity()*tpr2rpm);
+        telemetry.addData("Back Speed: ", shooterP.getVelocity()*tpr2rpm);
         telemetry.update();
 
-        t2.addData("Front Speed: ", front.getVelocity()*tpr2rpm);
-        t2.addData("Back Speed: ", back.getVelocity()*tpr2rpm);
+        t2.addData("Front Speed: ", feeder.getVelocity()*tpr2rpm);
+        t2.addData("Back Speed: ", shooterP.getVelocity()*tpr2rpm);
         t2.addLine("Back Target Velocity: 4500");
-        t2.addData("back power: ", back.getPower());
+        t2.addData("back power: ", shooterP.getPower());
 //        t2.addData("pid p: ", KP);
-        t2.addData("pidp motor: ",back.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER).p);
+        t2.addData("pidp motor: ", shooterP.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER).p);
         t2.update();
     }
 
     @Override
     public void stop() {
-        front.setVelocity(0.0);
-        back.setVelocity(0.0);
+        feeder.setVelocity(0.0);
+        shooterP.setVelocity(0.0);
     }
 }

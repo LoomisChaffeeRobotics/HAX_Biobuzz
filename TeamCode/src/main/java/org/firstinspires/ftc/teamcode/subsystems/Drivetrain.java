@@ -17,7 +17,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 //import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 import org.firstinspires.ftc.teamcode.robot.Robot;
-import org.firstinspires.ftc.teamcode.subsysOrig.FancyPID;
 
 import com.pedropathing.api.PoseFactory;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -25,6 +24,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import static com.pedropathing.ivy.commands.Commands.infinite;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 import com.pedropathing.follower.ManualDrive;
+import org.firstinspires.ftc.teamcode.subsysOrig.FancyPID;
 
 @Config
 public class Drivetrain {
