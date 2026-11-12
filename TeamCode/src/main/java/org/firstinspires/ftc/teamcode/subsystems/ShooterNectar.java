@@ -43,7 +43,7 @@ public class ShooterNectar {
     LUT lut;
 
     public ShooterNectar(Robot robot) {
-        flywheel = robot.hardwareMap.get(DcMotorEx.class, "flywheelN");
+        flywheel = robot.hardwareMap.get(DcMotorEx.class, "shooterN");
         flicker = robot.hardwareMap.get(Servo.class, "flickerN");
         feeder = robot.hardwareMap.get(DcMotorEx.class, "feeder");
 

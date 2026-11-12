@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.data.LUT;
@@ -31,12 +32,17 @@ public class ShooterIntakerTester extends OpMode {
     private static final double tpr2rpm = 60.0 / 28.0;
     private DcMotor intake;
 
+    private ElapsedTime flickerTimer;
+    private boolean RTDpressed = false;
+
+
     public static LUT lut;
 
 //    FancyPID pid = new FancyPID();
 
     @Override
     public void init() {
+        flickerTimer = new ElapsedTime();
         feeder = hardwareMap.get(DcMotorEx.class, "feeder");
         shooter = hardwareMap.get(DcMotorEx.class, "shooterP");
         flicker = hardwareMap.get(Servo.class, "flicker");
@@ -57,8 +63,9 @@ public class ShooterIntakerTester extends OpMode {
         }
 
         if (gamepad1.bWasPressed()){
-            intakePower = (shooterRpm == 0 ? -0.6: 0);
+            intakePower = (intakePower == 0 ? -0.6: 0);
         }
+
 
 
 
@@ -66,10 +73,15 @@ public class ShooterIntakerTester extends OpMode {
         feeder.setVelocity(FEEDER_RPM / tpr2rpm * (shooterRpm == 0? 0:1));
         shooter.setVelocity(shooterRpm / tpr2rpm);
 
-        if (gamepad1.right_trigger > 0.5){
+        if (gamepad1.right_trigger > 0.5 && !RTDpressed){
+
+            flickerTimer.reset();
             flicker.setPosition(0.4); //down
-        } else {
-            flicker.setPosition(0.8); //up
+        }
+        RTDpressed = (gamepad1.right_trigger > 0.5);
+
+        if (flickerTimer.time() >0.2){
+            flicker.setPosition(.8); //up
         }
 
 

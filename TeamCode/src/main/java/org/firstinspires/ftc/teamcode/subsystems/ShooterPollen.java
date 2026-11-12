@@ -43,8 +43,8 @@ public class ShooterPollen {
     LUT lut;
 
     public ShooterPollen(Robot robot) {
-        flywheel = robot.hardwareMap.get(DcMotorEx.class, "flywheelP");
-        flicker = robot.hardwareMap.get(Servo.class, "flickerP");
+        flywheel = robot.hardwareMap.get(DcMotorEx.class, "shooterP");
+        flicker = robot.hardwareMap.get(Servo.class, "flicker");
         feeder = robot.hardwareMap.get(DcMotorEx.class, "feeder");
 
         telemetry = robot.telemetry;

@@ -66,14 +66,15 @@ public class ShooterTestWithRPM extends OpMode {
         if (gamepad1.a){
             flicker.setPosition(0.4);
         }
-        if (gamepad1.y){
-            flicker.setPosition(0.8);
+        else {
+            flicker.setPosition(.8);
         }
 
 
 
 
         telemetry.addLine("distance: D-pad up/down +/- .1 meters, x resets");
+        telemetry.addLine("a/y for flicker down/up");
         telemetry.addData("Motors", "front, back");
         telemetry.addLine("Back Target Velocity: 4500");
         telemetry.addData("target shooter RPM: ", shooterRpm);
