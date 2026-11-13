@@ -5,6 +5,7 @@ import com.pedropathing.ivy.Command;
 import com.pedropathing.math.Pose;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.data.LUT;
@@ -33,13 +34,15 @@ public class ShooterPollen {
 
     static double RPMtoTicksPerSecond = (double) 28 / 60;
 
-    public double flickerBlockPos = 0;
-    public double flickerFreePos = 1;
-    public boolean spining = false;
+    public double flickerBlockPos = 0.8;
+    public double flickerFreePos = 0.4;
+    public boolean spinning = false;
     public boolean shooting = false;
 
-    public double rpmTol = 300;
+    public double rpmTolerance = 100;
     public Pose curPos;
+    private ElapsedTime timer;
+    private boolean starting = true;
     LUT lut;
 
     public ShooterPollen(Robot robot) {
@@ -49,6 +52,7 @@ public class ShooterPollen {
 
         telemetry = robot.telemetry;
         Drivetrain = robot.drive;
+        timer = new ElapsedTime();
     }
     /**
      * Updates the target RPM using a distance supplied by the caller.
@@ -67,19 +71,25 @@ public class ShooterPollen {
         rpm = RPM;
     }
 
-    public void spinUp(){spining = true;}
+    public void spinUp(){spinning = true;}
 
-    public void spinDown(){spining = false;}
-    public boolean getSpining(){return spining;}
+    public void spinDown(){spinning = false;}
+    public boolean getSpinning(){return spinning;}
 
-    public void shoot(){shooting = true;}
+    public void shoot(){
+        if (timer.time() > 2){
+            shooting = true;
+            starting = false;
+            timer.reset();
+        }
+    }
 
     public void stopShoot(){shooting = false;}
 
 
     public double getFlyWheelVel(){return flywheel.getVelocity() / RPMtoTicksPerSecond;}
     public boolean getSpunUp(){
-        if (abs(rpm - getFlyWheelVel()) < rpmTol){
+        if (abs(rpm - getFlyWheelVel()) < rpmTolerance){
             return true;
         }
         return false;
@@ -88,22 +98,17 @@ public class ShooterPollen {
 
     public Command periodic() {
         return infinite(() -> {
-            if (useCalculatedRPM) {
-                setRPMBasedOnDistance(distanceFromGoal);
-            }
 
-            if (spining){
-                flywheel.setVelocity(RPMtoTicksPerSecond * rpm);
-                feeder.setVelocity(4500 * rpm);
-            }
-            else {
-                flywheel.setVelocity(0);
-                feeder.setVelocity(0);
-            }
+            flywheel.setVelocity(RPMtoTicksPerSecond * rpm);
+            feeder.setVelocity(4500 * (rpm == 0? 0:1));
 
             if (shooting){
-                if (getSpunUp()){ flicker.setPosition(flickerFreePos); }
-                else{ spinUp(); } //Turn On flywheel if we try to shoot while off
+                if (timer.time() > 1 && !starting){
+                    stopShoot();
+                }
+                if (getSpunUp()){
+                    flicker.setPosition(flickerFreePos);
+                }
             }
             else{
                 flicker.setPosition(flickerBlockPos);

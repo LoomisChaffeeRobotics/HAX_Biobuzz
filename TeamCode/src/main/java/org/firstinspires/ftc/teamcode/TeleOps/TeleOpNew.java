@@ -92,7 +92,7 @@ public class TeleOpNew extends RobotOpMode {
             else{
                 robot.shooterN.spinUp();
             }
-            if (robot.shooterP.getSpining()){
+            if (robot.shooterP.getSpinning()){
                 robot.shooterP.spinDown();
             }
             else{

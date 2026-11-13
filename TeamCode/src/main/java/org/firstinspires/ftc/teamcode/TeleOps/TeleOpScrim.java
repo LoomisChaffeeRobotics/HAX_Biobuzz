@@ -58,7 +58,7 @@ public class TeleOpScrim extends RobotOpMode {
             robot.intake.off().schedule();
         }
 
-        if (gamepad1.right_trigger > 0){
+        if (gamepad1.right_trigger > 0.2){
 //            robot.shooterN.shoot();
             robot.shooterP.shoot();
         }
@@ -67,43 +67,24 @@ public class TeleOpScrim extends RobotOpMode {
 //            robot.shooterN.stopShoot();
         }
 //
-//        if (gamepad1.aWasPressed()) {
-//            if (robot.intake.isHingeDown()) {
-//                robot.intake.hingeUp();
-//            } else {
-//                robot.intake.hingeDown();
-//            }
-//        }
-
         if (gamepad1.yWasPressed()){
-//            if (robot.shooterN.getSpining()){
-//                robot.shooterN.spinDown();
-//            }
-//            else{
-//                robot.shooterN.spinUp();
-//            }
+
             if (robot.shooterP.rpm == 2500){
-                robot.shooterP.spinDown();
+                robot.shooterP.setRPMByHand(0);
             }
             else {
                 robot.shooterP.setRPMByHand(2500);
             }
         }
-        if (gamepad1.aWasPressed()){
-//            if (robot.shooterN.getSpining()){
-//                robot.shooterN.spinDown();
-//            }
-//            else{
-//                robot.shooterN.spinUp();
-//            }
+        else if (gamepad1.aWasPressed()){
+
             if (robot.shooterP.rpm ==2000){
-                robot.shooterP.spinDown();
+                robot.shooterP.setRPMByHand(0);
             }
             else {
                 robot.shooterP.setRPMByHand(2000);
             }
         }
-
         super.loop();
     }
 

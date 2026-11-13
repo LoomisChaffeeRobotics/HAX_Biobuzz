@@ -76,8 +76,8 @@ public class Drivetrain {
     public void pePaDrive(double lefty, double leftx, double rightx) {
         DrivePowers powers = ManualDrive.fieldCentric(
                 -lefty,
-                leftx,
-                rightx,
+                -leftx,
+                -rightx,
                 follower.pose().heading()
         );
         follower.manual(powers);

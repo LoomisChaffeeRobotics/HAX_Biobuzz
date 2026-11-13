@@ -16,7 +16,7 @@ public class Intaker {
     private hingeMode HINGEMODE = hingeMode.UP;
     public static double onPower = -.5;
     public static double offPower = 0;
-    public static double reversePower = -1;
+    public static double reversePower = -onPower;
     public static double upPos = 0;
     public static double downPos = 1;
     private final DcMotorEx intakeMotor;

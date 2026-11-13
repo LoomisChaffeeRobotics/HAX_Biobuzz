@@ -108,10 +108,10 @@ public class ShooterNectar {
             }
 
 
-
-            telemetry.addData("Nec Flywheel Velocity", getFlyWheelVel());
-            telemetry.addData("Nec Flywheel target", rpm);
-            telemetry.addData("Nec Flywheel Power", flywheel.getPower());
+//
+//            telemetry.addData("Nec Flywheel Velocity", getFlyWheelVel());
+//            telemetry.addData("Nec Flywheel target", rpm);
+//            telemetry.addData("Nec Flywheel Power", flywheel.getPower());
         });
     }
 }
