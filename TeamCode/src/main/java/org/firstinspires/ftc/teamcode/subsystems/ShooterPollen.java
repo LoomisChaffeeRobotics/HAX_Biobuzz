@@ -41,7 +41,6 @@ public class ShooterPollen {
 
     public double rpmTolerance = 100;
     public Pose curPos;
-    private ElapsedTime timer;
     private boolean starting = true;
     LUT lut;
 
@@ -52,7 +51,6 @@ public class ShooterPollen {
 
         telemetry = robot.telemetry;
         Drivetrain = robot.drive;
-        timer = new ElapsedTime();
     }
     /**
      * Updates the target RPM using a distance supplied by the caller.
@@ -77,11 +75,7 @@ public class ShooterPollen {
     public boolean getSpinning(){return spinning;}
 
     public void shoot(){
-        if (timer.time() > 2){
-            shooting = true;
-            starting = false;
-            timer.reset();
-        }
+        shooting = true;
     }
 
     public void stopShoot(){shooting = false;}
@@ -102,13 +96,8 @@ public class ShooterPollen {
             flywheel.setVelocity(RPMtoTicksPerSecond * rpm);
             feeder.setVelocity(4500 * (rpm == 0? 0:1));
 
-            if (shooting){
-                if (timer.time() > 1 && !starting){
-                    stopShoot();
-                }
-                if (getSpunUp()){
-                    flicker.setPosition(flickerFreePos);
-                }
+            if (shooting && getSpunUp()){
+                flicker.setPosition(flickerFreePos);
             }
             else{
                 flicker.setPosition(flickerBlockPos);

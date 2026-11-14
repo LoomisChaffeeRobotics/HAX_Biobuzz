@@ -69,11 +69,11 @@ public class TeleOpScrim extends RobotOpMode {
 //
         if (gamepad1.yWasPressed()){
 
-            if (robot.shooterP.rpm == 2500){
+            if (robot.shooterP.rpm == 2250){
                 robot.shooterP.setRPMByHand(0);
             }
             else {
-                robot.shooterP.setRPMByHand(2500);
+                robot.shooterP.setRPMByHand(2250);
             }
         }
         else if (gamepad1.aWasPressed()){
