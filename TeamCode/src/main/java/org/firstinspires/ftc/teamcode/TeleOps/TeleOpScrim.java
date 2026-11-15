@@ -14,6 +14,7 @@ public class TeleOpScrim extends RobotOpMode {
     private boolean fieldCentricManual = true;
 
     private boolean isRed = true;
+    private double rpm = 2250;
 
     @Override
     public void start(){
@@ -47,11 +48,11 @@ public class TeleOpScrim extends RobotOpMode {
         );
 
 
-        if (gamepad1.left_trigger > 0.2){
+        if (gamepad2.left_bumper){
 
             robot.intake.on().schedule();
         }
-        else if (gamepad1.left_bumper){
+        else if (gamepad2.left_trigger > 0.2){
             robot.intake.reverse().schedule();
         }
         else{
@@ -67,15 +68,29 @@ public class TeleOpScrim extends RobotOpMode {
 //            robot.shooterN.stopShoot();
         }
 //
-        if (gamepad1.yWasPressed()){
+        if (gamepad2.rightBumperWasPressed()){
 
-            if (robot.shooterP.rpm == 2250){
+            if (robot.shooterP.rpm > 0){
                 robot.shooterP.setRPMByHand(0);
             }
             else {
-                robot.shooterP.setRPMByHand(2250);
+                robot.shooterP.setRPMByHand(rpm);
             }
         }
+        if (gamepad2.yWasPressed()){
+            rpm += 5;
+        }
+        else if (gamepad2.aWasPressed()){
+            rpm -= 5;
+        }
+        if (gamepad2.dpadUpWasPressed()){
+            robot.intake.increaseIntakePower();
+        }
+        else if (gamepad2.dpadDownWasPressed()){
+            robot.intake.decreaseIntakePower();
+        }
+
+
 //        else if (gamepad1.aWasPressed()){
 //
 //            if (robot.shooterP.rpm ==2000){
@@ -89,10 +104,11 @@ public class TeleOpScrim extends RobotOpMode {
     }
 
     private void update(){
-        telemetry.addData("Drive mode", fieldCentricManual ? "Field-centric" : "Not Field-centric");
-        telemetry.addData("position: ", robot.drive.getPose());
+//        telemetry.addData("Drive mode", fieldCentricManual ? "Field-centricentric" : "Not Field-centric");
+//        telemetry.addData("position: ", robot.drive.getPose());
 //        telemetry.addData("Tags seen: ", robot.localization.tagsSeen(isRed));
         curPose = robot.drive.getPose();
+        telemetry.addData("rpm: ", rpm);
 
         double distanceFromHive = robot.drive.getDistanceFromHive();
         robot.shooterP.setDistanceFromHive(distanceFromHive);

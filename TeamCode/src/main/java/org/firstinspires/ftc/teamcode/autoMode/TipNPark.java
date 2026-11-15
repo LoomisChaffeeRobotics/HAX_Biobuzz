@@ -33,6 +33,19 @@ public class TipNPark extends RobotOpMode {
     // Autonomous routine
     public Command autoRoutine() {
         return sequential(
+                instant(() -> {
+                    robot.shooterP.setRPMByHand(2250); //FAR value
+                    robot.shooterP.spinUp();
+                }),
+                waitMs(3500),
+                instant(() -> {
+                    robot.shooterP.shoot();
+                }),
+                waitMs(3000),
+                instant(() -> {
+                    robot.shooterP.stopShoot();
+                    robot.shooterP.spinDown();
+                }),
                 follow(follower, path1())
         );
     }
@@ -43,6 +56,7 @@ public class TipNPark extends RobotOpMode {
         follower = Constants.create(hardwareMap);
         follower.setPose(start);
         follower.update();
+        super.init();
     }
     @Override
     public void start() {
@@ -64,6 +78,7 @@ public class TipNPark extends RobotOpMode {
         }
 
         telemetry.update();
+        super.loop();
     }
 
 

@@ -105,9 +105,9 @@ public class ShooterPollen {
 
 
 
-            telemetry.addData("Poll Flywheel Velocity", getFlyWheelVel());
-            telemetry.addData("Poll Flywheel target", rpm);
-            telemetry.addData("Poll Flywheel Power", flywheel.getPower());
+//            telemetry.addData("Poll Flywheel Velocity", getFlyWheelVel());
+//            telemetry.addData("Poll Flywheel target", rpm);
+//            telemetry.addData("Poll Flywheel Power", flywheel.getPower());
         });
     }
 }

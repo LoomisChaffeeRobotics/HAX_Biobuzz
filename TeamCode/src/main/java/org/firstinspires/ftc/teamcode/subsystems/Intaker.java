@@ -45,6 +45,13 @@ public class Intaker {
     public Command hingeUp() { return instant(() -> HINGEMODE = hingeMode.UP); }
     public boolean isHingeDown(){ return (HINGEMODE == hingeMode.DOWN); }
 
+    public void increaseIntakePower(){
+        onPower -= 0.1;
+    }
+    public void decreaseIntakePower(){
+        onPower += 0.1;
+    }
+
     public Command periodic() {
         return infinite(() -> {
             switch (mode) {
@@ -64,9 +71,10 @@ public class Intaker {
                 case DOWN:
                     hinge.setPosition(downPos);
             }
-            telemetry.addData("Intake Mode: ", mode);
-            telemetry.addData("Intake Current", intakeMotor.getCurrent(CurrentUnit.MILLIAMPS));
-            telemetry.addData("Intake Velocity", intakeMotor.getVelocity());
+//            telemetry.addData("Intake Mode: ", mode);
+//            telemetry.addData("Intake Current", intakeMotor.getCurrent(CurrentUnit.MILLIAMPS));
+//            telemetry.addData("Intake Velocity", intakeMotor.getVelocity());
+            telemetry.addData("intake: ", onPower);
         });
     }
 

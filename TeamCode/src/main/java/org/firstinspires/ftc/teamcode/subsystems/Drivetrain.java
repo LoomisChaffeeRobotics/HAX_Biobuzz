@@ -130,9 +130,9 @@ public class Drivetrain {
                 tagSet = Limelight.TagSet.BLUE_BACK;
             }
 
-            telemetry.addData("Current X", follower.pose().x());
-            telemetry.addData("Current Y", follower.pose().y());
-            telemetry.addData("Current Heading", follower.pose().heading());;
+//            telemetry.addData("Current X", follower.pose().x());
+//            telemetry.addData("Current Y", follower.pose().y());
+//            telemetry.addData("Current Heading", follower.pose().heading());;
         });
     }
 
