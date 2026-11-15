@@ -76,20 +76,21 @@ public class TeleOpScrim extends RobotOpMode {
                 robot.shooterP.setRPMByHand(2250);
             }
         }
-        else if (gamepad1.aWasPressed()){
-
-            if (robot.shooterP.rpm ==2000){
-                robot.shooterP.setRPMByHand(0);
-            }
-            else {
-                robot.shooterP.setRPMByHand(2000);
-            }
-        }
+//        else if (gamepad1.aWasPressed()){
+//
+//            if (robot.shooterP.rpm ==2000){
+//                robot.shooterP.setRPMByHand(0);
+//            }
+//            else {
+//                robot.shooterP.setRPMByHand(2000);
+//            }
+//        }
         super.loop();
     }
 
     private void update(){
         telemetry.addData("Drive mode", fieldCentricManual ? "Field-centric" : "Not Field-centric");
+        telemetry.addData("position: ", robot.drive.getPose());
 //        telemetry.addData("Tags seen: ", robot.localization.tagsSeen(isRed));
         curPose = robot.drive.getPose();
 
