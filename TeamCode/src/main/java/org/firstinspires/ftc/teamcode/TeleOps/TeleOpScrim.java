@@ -14,7 +14,7 @@ public class TeleOpScrim extends RobotOpMode {
     private boolean fieldCentricManual = true;
 
     private boolean isRed = true;
-    private double rpm = 2250;
+    private double rpm = 2195;
 
     @Override
     public void start(){
@@ -68,14 +68,10 @@ public class TeleOpScrim extends RobotOpMode {
 //            robot.shooterN.stopShoot();
         }
 //
-        if (gamepad2.rightBumperWasPressed()){
-
-            if (robot.shooterP.rpm > 0){
-                robot.shooterP.setRPMByHand(0);
-            }
-            else {
-                robot.shooterP.setRPMByHand(rpm);
-            }
+        if (gamepad2.right_bumper){
+            robot.shooterP.setRPMByHand(rpm);
+        } else {
+            robot.shooterP.setRPMByHand(0);
         }
         if (gamepad2.yWasPressed()){
             rpm += 5;

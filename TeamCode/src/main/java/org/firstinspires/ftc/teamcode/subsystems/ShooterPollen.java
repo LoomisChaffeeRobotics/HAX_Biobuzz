@@ -19,7 +19,7 @@ public class ShooterPollen {
     public static boolean override = false;
     public static double overrideTarget = 1000;
     DcMotorEx flywheel;
-    Servo flicker;
+    public Servo flicker;
     DcMotorEx feeder;
     private final Telemetry telemetry;
     public Drivetrain Drivetrain;
@@ -42,6 +42,7 @@ public class ShooterPollen {
     public double rpmTolerance = 100;
     public Pose curPos;
     private boolean starting = true;
+    public boolean manualOveride = false;
     LUT lut;
 
     public ShooterPollen(Robot robot) {
@@ -96,15 +97,14 @@ public class ShooterPollen {
             flywheel.setVelocity(RPMtoTicksPerSecond * rpm);
             feeder.setVelocity(4500 * (rpm == 0? 0:1));
 
-            if (shooting && getSpunUp()){
-                flicker.setPosition(flickerFreePos);
+            if (!manualOveride){ //used in tnp descrete auto
+                if (shooting && getSpunUp()){
+                    flicker.setPosition(flickerFreePos);
+                }
+                else{
+                    flicker.setPosition(flickerBlockPos);
+                }
             }
-            else{
-                flicker.setPosition(flickerBlockPos);
-            }
-
-
-
 //            telemetry.addData("Poll Flywheel Velocity", getFlyWheelVel());
 //            telemetry.addData("Poll Flywheel target", rpm);
 //            telemetry.addData("Poll Flywheel Power", flywheel.getPower());

@@ -26,16 +26,15 @@ public class TipNPark extends RobotOpMode {
 
     private final PoseFactory poseFactory = PoseFactory.degrees();
 
-    private final Pose start = poseFactory.of(56, 8, 90);
-    private final Pose path1 = poseFactory.of(11.5916, 94.2349, 0);
-    private final Pose path1Control1 = poseFactory.of(15.149, 26.089, 0);
+    private final Pose start = poseFactory.of(56, 8, 180);
+    private final Pose path1 = poseFactory.of(11.5916, 94.2349, 180);
+    private final Pose path1Control1 = poseFactory.of(15.149, 26.089, 180);
 
     // Autonomous routine
     public Command autoRoutine() {
         return sequential(
                 instant(() -> {
-                    robot.shooterP.setRPMByHand(2250); //FAR value
-                    robot.shooterP.spinUp();
+                    robot.shooterP.setRPMByHand(2200); //FAR value
                 }),
                 waitMs(3500),
                 instant(() -> {
@@ -43,8 +42,7 @@ public class TipNPark extends RobotOpMode {
                 }),
                 waitMs(3000),
                 instant(() -> {
-                    robot.shooterP.stopShoot();
-                    robot.shooterP.spinDown();
+                    robot.shooterP.setRPMByHand(0);
                 }),
                 follow(follower, path1())
         );
