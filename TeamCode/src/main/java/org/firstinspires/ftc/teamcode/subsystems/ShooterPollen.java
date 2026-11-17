@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.ivy.Command;
 import com.pedropathing.math.Pose;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -52,6 +54,7 @@ public class ShooterPollen {
 
         telemetry = robot.telemetry;
         Drivetrain = robot.drive;
+        flywheel.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(400,20,.5,3.5));
     }
     /**
      * Updates the target RPM using a distance supplied by the caller.

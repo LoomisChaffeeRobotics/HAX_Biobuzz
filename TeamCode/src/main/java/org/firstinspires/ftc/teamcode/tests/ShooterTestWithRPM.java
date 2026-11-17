@@ -53,9 +53,13 @@ public class ShooterTestWithRPM extends OpMode {
 
 
         // DcMotorEx.setVelocity expects encoder ticks per second.
-        shooterRpm += (gamepad1.dpadDownWasPressed() ? -100:0) + (gamepad1.dpadUpWasPressed() ? 100:0)+(gamepad1.leftTriggerWasPressed() ? -10:0) + (gamepad1.rightTriggerWasPressed() ? 10:0);
+        shooterRpm += (gamepad1.dpadDownWasPressed() ? -100:0)
+                + (gamepad1.dpadUpWasPressed() ? 100:0)
+                + (gamepad1.leftTriggerWasPressed() ? -10:0)
+                + (gamepad1.rightTriggerWasPressed() ? 10:0)
+                ;
 
-        if (gamepad1.xWasPressed()){
+        if (gamepad1.xWasPressed()) {
             shooterRpm = 0.0;
         }
 
