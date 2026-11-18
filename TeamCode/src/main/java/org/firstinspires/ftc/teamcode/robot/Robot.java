@@ -15,6 +15,7 @@ public class Robot {
     public final Drivetrain drive;
     public final ShooterNectar shooterN;
     public final ShooterPollen shooterP;
+    public final Indicator indicator;
 
     public Robot(OpMode opMode) {
         hardwareMap = opMode.hardwareMap;
@@ -27,5 +28,6 @@ public class Robot {
         drive = new Drivetrain(this);
         shooterN = new ShooterNectar(this);
         shooterP = new ShooterPollen(this);
+        indicator = new Indicator(this);
     }
 }

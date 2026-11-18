@@ -87,6 +87,8 @@ public class TeleOpScrim extends RobotOpMode {
         }
 
 
+
+
 //        else if (gamepad1.aWasPressed()){
 //
 //            if (robot.shooterP.rpm ==2000){
@@ -109,5 +111,7 @@ public class TeleOpScrim extends RobotOpMode {
         double distanceFromHive = robot.drive.getDistanceFromHive();
         robot.shooterP.setDistanceFromHive(distanceFromHive);
 //        robot.shooterN.setDistanceFromHive(distanceFromHive);
+
+        robot.indicator.update(robot.shooterP.getSpunUp());
     }
 }

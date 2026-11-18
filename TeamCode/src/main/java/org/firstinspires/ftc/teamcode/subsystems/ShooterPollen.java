@@ -41,7 +41,7 @@ public class ShooterPollen {
     public boolean spinning = false;
     public boolean shooting = false;
 
-    public double rpmTolerance = 100;
+    public double rpmTolerance = 50;
     public Pose curPos;
     private boolean starting = true;
     public boolean manualOveride = false;
